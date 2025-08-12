@@ -1,0 +1,18 @@
+fetch("https://example.com/api/signup", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    email: "test@email.com",
+    password: "1234",
+    name: "name",
+    mbti: "ISTJ",
+    profileImageName: "imgName",
+    gender: "M",
+    address: "경기도 부천시 ~"
+  })
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error("Error:", error));

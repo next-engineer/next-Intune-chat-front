@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서버 연결 테스트</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #2563eb;
+            margin-bottom: 20px;
+        }
+        .success {
+            background: #dcfce7;
+            color: #166534;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .info {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .button {
+            background: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .button:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 서버 연결 성공!</h1>
+        
+        <div class="success">
+            <strong>✅ Vite 개발 서버가 정상적으로 실행되고 있습니다!</strong>
+        </div>
+        
+        <div class="info">
+            <p><strong>서버 정보:</strong></p>
+            <p>포트: 5173</p>
+            <p>상태: 실행 중</p>
+            <p>시간: <span id="current-time"></span></p>
+        </div>
+        
+        <h2>테스트 링크</h2>
+        <div>
+            <a href="/" class="button">메인 페이지</a>
+            <a href="/simple-test" class="button">간단한 테스트</a>
+            <a href="/chat/test" class="button">채팅 테스트</a>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <h3>문제 해결 방법</h3>
+            <ul style="text-align: left; max-width: 500px; margin: 0 auto;">
+                <li>브라우저 캐시 삭제: Ctrl + F5</li>
+                <li>다른 브라우저 사용</li>
+                <li>방화벽 설정 확인</li>
+                <li>안티바이러스 일시 비활성화</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // 현재 시간 표시
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('current-time').textContent = now.toLocaleString('ko-KR');
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+        
+        // 페이지 로드 확인
+        console.log('테스트 페이지가 로드되었습니다!');
+        console.log('서버 연결 상태: 정상');
+    </script>
+</body>
+</html> 
