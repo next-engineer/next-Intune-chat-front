@@ -1,21 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import SignUp from '../../../modules/user/components/signUp';
-import Layout from '../../../commons/components/layouts';
+import { SignupForm } from "@/commons/components/auth/SignupForm"
 
-const SignUpPage: React.FC = () => {
+export default function SignUpPage() {
   return (
-    <Layout title="Sign Up">
-      <div className="signup-page">
-        <SignUp />
-        <div className="signup-links">
-          <p>
-            Already have an account? <Link to="/signin">Sign in here</Link>
-          </p>
-        </div>
+    <div className="min-h-screen bg-soft flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <SignupForm />
       </div>
-    </Layout>
-  );
-};
-
-export default SignUpPage; 
+    </div>
+  )
+} 
