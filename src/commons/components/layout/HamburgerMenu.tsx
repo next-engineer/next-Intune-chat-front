@@ -168,13 +168,7 @@ export function HamburgerMenu({ user }: HamburgerMenuProps) {
         {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </Button>
 
-      {/* 메뉴 오버레이 */}
-      {isOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
-          onClick={closeMenu}
-        />
-      )}
+      {/* 메뉴 오버레이 제거됨 */}
 
       {/* 메뉴 패널 */}
       <div className={`

@@ -16,7 +16,7 @@ export const IntuneInput = forwardRef<HTMLInputElement, IntuneInputProps>(
     return (
       <div className="space-y-2">
         {label && (
-          <Label className="text-sm font-medium text-gray-900">
+          <Label className="text-sm font-medium text-gray-900 dark:text-white">
             {label}
             {required && <span className="text-danger ml-1">*</span>}
           </Label>
@@ -31,8 +31,8 @@ export const IntuneInput = forwardRef<HTMLInputElement, IntuneInputProps>(
           )}
           {...props}
         />
-        {error && <p className="text-sm text-danger">{error}</p>}
-        {success && <p className="text-sm text-success">{success}</p>}
+        {error && <p className="text-sm text-danger dark:text-red-400">{error}</p>}
+        {success && <p className="text-sm text-success dark:text-green-400">{success}</p>}
       </div>
     )
   },

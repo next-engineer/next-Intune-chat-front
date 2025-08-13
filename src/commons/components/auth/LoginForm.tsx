@@ -5,19 +5,14 @@ import { IntuneInput } from "@/commons/components/ui/intune-input"
 import { IntuneButton } from "@/commons/components/ui/intune-button"
 import { useAuthStore } from "@/stores/authStore"
 import { User, Shield } from "lucide-react"
-import { verifyPassword, simpleHash } from "@/commons/utils/hashUtils"
-
-interface LoginFormData {
-  email: string
-  password: string
-}
+import { simpleHash } from "@/commons/utils/hashUtils"
 
 // 테스트용 계정 데이터 (해시된 비밀번호)
 const TEST_ACCOUNTS = [
   {
     name: "관리자",
     email: "admin@intune.com",
-    passwordHash: "a66abb5684c45962d887564f08346e8d", // "admin" 해시
+    passwordHash: "e10adc3949ba59abbe56e057f20f883e", // "123456" 해시
     salt: "admin_salt_123",
     isAdmin: true,
     description: "모든 기능 접근 가능"
@@ -47,6 +42,11 @@ const TEST_ACCOUNTS = [
     description: "일반 사용자"
   }
 ]
+
+interface LoginFormData {
+  email: string
+  password: string
+}
 
 export function LoginForm() {
   const navigate = useNavigate()
@@ -160,32 +160,6 @@ export function LoginForm() {
       <div className="text-center space-y-2">
         <h1 className="text-2xl font-bold text-gray-900">로그인</h1>
         <p className="text-subtext">Intune에 오신 것을 환영합니다</p>
-      </div>
-
-      {/* 테스트 계정 선택 섹션 */}
-      <div className="bg-blue-50 rounded-lg p-4">
-        <h3 className="text-sm font-semibold text-blue-900 mb-3 flex items-center gap-2">
-          <User className="w-4 h-4" />
-          테스트 계정 선택
-        </h3>
-        <div className="grid grid-cols-1 gap-2">
-          {TEST_ACCOUNTS.map((account, index) => (
-            <button
-              key={index}
-              type="button"
-              onClick={() => applyTestAccount(account)}
-              className="text-left p-2 bg-white rounded border border-blue-200 hover:bg-blue-100 transition-colors"
-            >
-              <div className="flex items-center gap-2">
-                <div className="text-sm font-medium text-blue-900">{account.name}</div>
-                {account.isAdmin && (
-                  <Shield className="w-3 h-3 text-red-600" />
-                )}
-              </div>
-              <div className="text-xs text-blue-600">{account.email} | {account.description}</div>
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* 로그인 에러 메시지 */}
