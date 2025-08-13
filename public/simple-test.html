@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>간단한 테스트 페이지</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-6">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold text-gray-900 hover:text-blue-600">← Intune Chat</a>
+                </div>
+                <nav class="flex space-x-4">
+                    <a href="/" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                        홈으로
+                    </a>
+                    <a href="/chat-test.html" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
+                        채팅 테스트
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="text-center fade-in">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+                🎉 간단한 테스트 페이지
+            </h1>
+            <p class="text-xl text-gray-600 mb-8">
+                라우팅이 정상적으로 작동하고 있습니다!
+            </p>
+        </div>
+
+        <!-- Test Results -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            <div class="bg-white rounded-lg shadow-md p-6 fade-in">
+                <h2 class="text-2xl font-semibold text-green-800 mb-4">✅ 테스트 성공!</h2>
+                <ul class="space-y-3 text-green-700">
+                    <li class="flex items-center">
+                        <span class="mr-2">✓</span>
+                        React 컴포넌트 렌더링
+                    </li>
+                    <li class="flex items-center">
+                        <span class="mr-2">✓</span>
+                        Tailwind CSS 스타일링
+                    </li>
+                    <li class="flex items-center">
+                        <span class="mr-2">✓</span>
+                        React Router 라우팅
+                    </li>
+                    <li class="flex items-center">
+                        <span class="mr-2">✓</span>
+                        TypeScript 컴파일
+                    </li>
+                    <li class="flex items-center">
+                        <span class="mr-2">✓</span>
+                        HTML 페이지 로드
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 fade-in">
+                <h2 class="text-2xl font-semibold text-blue-800 mb-4">🔧 시스템 정보</h2>
+                <div class="space-y-3 text-blue-700">
+                    <div class="flex justify-between">
+                        <span>서버 상태:</span>
+                        <span class="font-semibold text-green-600">정상</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>포트:</span>
+                        <span class="font-semibold">8080</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>페이지 타입:</span>
+                        <span class="font-semibold">정적 HTML</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>로드 시간:</span>
+                        <span class="font-semibold" id="load-time">계산 중...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Elements -->
+        <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6 text-center">🎮 인터랙티브 테스트</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Counter -->
+                <div class="text-center">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">카운터</h3>
+                    <div class="text-4xl font-bold text-blue-600 mb-4" id="counter">0</div>
+                    <button onclick="incrementCounter()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        증가
+                    </button>
+                </div>
+
+                <!-- Color Changer -->
+                <div class="text-center">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">색상 변경</h3>
+                    <div class="w-20 h-20 mx-auto mb-4 rounded-lg border-2 border-gray-300" id="color-box"></div>
+                    <button onclick="changeColor()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                        색상 변경
+                    </button>
+                </div>
+
+                <!-- Timer -->
+                <div class="text-center">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">타이머</h3>
+                    <div class="text-2xl font-bold text-purple-600 mb-4" id="timer">00:00</div>
+                    <button onclick="toggleTimer()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700" id="timer-btn">
+                        시작
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="text-center">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">🚀 다른 페이지로 이동</h2>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="/" class="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors">
+                    🏠 메인 홈페이지
+                </a>
+                <a href="/chat-test.html" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                    💬 채팅 테스트
+                </a>
+                <a href="/test.html" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">
+                    🧪 서버 테스트
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center">
+                <p>&copy; 2024 Intune Chat. 간단한 테스트 페이지입니다.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 페이지 로드 시간 계산
+        const loadTime = performance.now();
+        document.getElementById('load-time').textContent = Math.round(loadTime) + 'ms';
+
+        // 카운터 기능
+        let counter = 0;
+        function incrementCounter() {
+            counter++;
+            document.getElementById('counter').textContent = counter;
+        }
+
+        // 색상 변경 기능
+        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3'];
+        let colorIndex = 0;
+        function changeColor() {
+            const colorBox = document.getElementById('color-box');
+            colorBox.style.backgroundColor = colors[colorIndex];
+            colorIndex = (colorIndex + 1) % colors.length;
+        }
+
+        // 타이머 기능
+        let timerRunning = false;
+        let timerInterval;
+        let seconds = 0;
+        function toggleTimer() {
+            const timerBtn = document.getElementById('timer-btn');
+            const timerDisplay = document.getElementById('timer');
+            
+            if (timerRunning) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+                timerBtn.textContent = '시작';
+                timerBtn.className = 'bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700';
+            } else {
+                timerInterval = setInterval(() => {
+                    seconds++;
+                    const minutes = Math.floor(seconds / 60);
+                    const secs = seconds % 60;
+                    timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                }, 1000);
+                timerRunning = true;
+                timerBtn.textContent = '정지';
+                timerBtn.className = 'bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700';
+            }
+        }
+
+        // 페이지 로드 확인
+        console.log('간단한 테스트 페이지가 로드되었습니다!');
+        console.log('모든 기능이 정상적으로 작동합니다.');
+    </script>
+</body>
+</html> 

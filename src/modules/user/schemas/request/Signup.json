@@ -1,0 +1,40 @@
+{
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "User's email address"
+    },
+    "password": {
+      "type": "string",
+      "minLength": 4,
+      "description": "User's password"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "User's full name"
+    },
+    "mbti": {
+      "type": "string",
+      "enum": ["ISTJ", "ISFJ", "INFJ", "INTJ", "ISTP", "ISFP", "INFP", "INTP", "ESTP", "ESFP", "ENFP", "ENTP", "ESTJ", "ESFJ", "ENFJ", "ENTJ"],
+      "description": "User's MBTI personality type"
+    },
+    "profileImageName": {
+      "type": "string",
+      "description": "Name of the user's profile image"
+    },
+    "gender": {
+      "type": "string",
+      "enum": ["M", "F"],
+      "description": "User's gender (M for Male, F for Female)"
+    },
+    "address": {
+      "type": "string",
+      "description": "User's address"
+    }
+  },
+  "required": ["email", "password", "name", "mbti", "gender", "address"],
+  "additionalProperties": false
+}
