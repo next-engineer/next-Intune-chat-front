@@ -1,66 +1,88 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { userApi } from '../../../modules/user/apis';
-import Layout from '../../../commons/components/layouts';
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { MainLayout } from "@/commons/components/layout/MainLayout"
+import { MatchingInterface } from "@/commons/components/matching/MatchingInterface"
+import { MatchHistory } from "@/commons/components/matching/MatchHistory"
 
-const MatchPage: React.FC = () => {
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string>('');
-  const [matchResult, setMatchResult] = useState<any>(null);
+// Mock data
+const mockMatchHistory = [
+  {
+    id: "1",
+    nickname: "지민",
+    mbti: "ENFP",
+    profileImage: "/diverse-group.png",
+    matchedAt: "2024-01-15",
+    status: "active" as const,
+    lastMessage: "안녕하세요! 반가워요 😊",
+  },
+  {
+    id: "2",
+    nickname: "현우",
+    mbti: "ISTJ",
+    profileImage: "/thoughtful-man.png",
+    matchedAt: "2024-01-14",
+    status: "ended" as const,
+  },
+  {
+    id: "3",
+    nickname: "수진",
+    mbti: "INFP",
+    profileImage: "/diverse-woman-portrait.png",
+    matchedAt: "2024-01-13",
+    status: "active" as const,
+    lastMessage: "오늘 날씨가 정말 좋네요!",
+  },
+]
 
-  const handleMatch = async () => {
-    setLoading(true);
-    setError('');
+export default function MatchingPage() {
+  const navigate = useNavigate()
+  const [hasUsedTodayMatch, setHasUsedTodayMatch] = useState(false)
+  const [matchHistory, setMatchHistory] = useState(mockMatchHistory)
 
-    try {
-      const result = await userApi.match();
-      setMatchResult(result);
-    } catch (err: any) {
-      setError(err.message || 'Failed to find match');
-    } finally {
-      setLoading(false);
+  const handleMatchFound = (match: any) => {
+    // TODO: Implement INTUNE-API-05 - Save match result
+    console.log("Match found:", match)
+    setHasUsedTodayMatch(true)
+
+    // Add to history
+    const newMatch = {
+      id: match.id,
+      nickname: match.nickname,
+      mbti: match.mbti,
+      profileImage: match.profileImage,
+      matchedAt: new Date().toISOString().split("T")[0],
+      status: "active" as const,
+      lastMessage: "", // lastMessage 필드를 추가하여 타입 오류를 방지합니다.
     }
-  };
+    setMatchHistory((prev) => [newMatch, ...prev])
+  }
 
-  const handleStartChat = (roomId: string) => {
-    navigate(`/chat/room/${roomId}`);
-  };
+  const handleStartChat = (matchId: string) => {
+    // TODO: Navigate to chat with specific match
+    console.log("Starting chat with match:", matchId)
+    navigate(`/chat/${matchId}`)
+  }
+
+  const handleSelectMatch = (matchId: string) => {
+    navigate(`/chat/${matchId}`)
+  }
 
   return (
-    <Layout title="Find Match">
-      <div className="match-page">
-        <h2>Find Your Match</h2>
-        <p>Click the button below to find someone to chat with!</p>
-        
-        <button 
-          onClick={handleMatch} 
-          disabled={loading}
-          className="match-button"
-        >
-          {loading ? 'Finding match...' : 'Find Match'}
-        </button>
+    <MainLayout>
+      <div className="max-w-md mx-auto space-y-6">
+        <div className="text-center space-y-2">
+          <h1 className="text-2xl font-bold text-gray-900">매칭</h1>
+          <p className="text-subtext">MBTI 기반으로 당신과 잘 맞는 사람을 찾아보세요</p>
+        </div>
 
-        {error && <div className="error">{error}</div>}
+        <MatchingInterface
+          onMatchFound={handleMatchFound}
+          onStartChat={handleStartChat}
+          hasUsedTodayMatch={hasUsedTodayMatch}
+        />
 
-        {matchResult && (
-          <div className="match-result">
-            <h3>Match Found!</h3>
-            <div className="match-info">
-              <p><strong>Name:</strong> {matchResult.name}</p>
-              <p><strong>Interests:</strong> {matchResult.interests?.join(', ') || 'No interests listed'}</p>
-            </div>
-            <button 
-              onClick={() => handleStartChat(matchResult.roomId)}
-              className="start-chat-button"
-            >
-              Start Chat
-            </button>
-          </div>
-        )}
+        <MatchHistory matches={matchHistory} onSelectMatch={handleSelectMatch} />
       </div>
-    </Layout>
-  );
-};
-
-export default MatchPage; 
+    </MainLayout>
+  )
+} 

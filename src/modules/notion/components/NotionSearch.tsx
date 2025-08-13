@@ -1,9 +1,47 @@
-import React, { useState } from 'react';
-import { notionApiService, NotionPage, NotionDatabase } from '../../../commons/apis/notion.api';
+import React, { useState, useCallback, useMemo } from 'react';
+import { debounce } from '../../../commons/utils';
+import { notionApiService } from '../apis';
+import { NotionPage, NotionDatabase } from '../types';
 
 interface NotionSearchProps {
   onSelect?: (item: NotionPage | NotionDatabase) => void;
 }
+
+// 메모이제이션된 검색 결과 아이템 컴포넌트
+const SearchResultItem = React.memo<{
+  item: NotionPage | NotionDatabase;
+  onClick: (item: NotionPage | NotionDatabase) => void;
+}>(({ item, onClick }) => {
+  const title = useMemo(() => {
+    if ('properties' in item) {
+      return item.properties?.title?.title?.[0]?.plain_text || 
+             item.properties?.Name?.title?.[0]?.plain_text || 
+             '제목 없음';
+    }
+    return '제목 없음';
+  }, [item]);
+
+  const type = useMemo(() => {
+    return 'url' in item ? '페이지' : '데이터베이스';
+  }, [item]);
+
+  return (
+    <div
+      className="p-3 border-b border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors"
+      onClick={() => onClick(item)}
+    >
+      <div className="flex items-center justify-between">
+        <div className="flex-1">
+          <h3 className="font-medium text-gray-900 truncate">{title}</h3>
+          <p className="text-sm text-gray-500">{type}</p>
+        </div>
+        <div className="text-xs text-gray-400 ml-2">
+          {type === '페이지' ? '📄' : '🗃️'}
+        </div>
+      </div>
+    </div>
+  );
+});
 
 const NotionSearch: React.FC<NotionSearchProps> = ({ onSelect }) => {
   const [query, setQuery] = useState('');
@@ -11,117 +49,118 @@ const NotionSearch: React.FC<NotionSearchProps> = ({ onSelect }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSearch = async (searchQuery: string) => {
-    if (!searchQuery.trim()) {
-      setResults([]);
-      return;
-    }
+  // 디바운스된 검색 함수
+  const debouncedSearch = useMemo(
+    () => debounce(async (searchQuery: string) => {
+      if (!searchQuery.trim()) {
+        setResults([]);
+        return;
+      }
 
-    try {
-      setLoading(true);
-      setError(null);
-      const searchResults = await notionApiService.search(searchQuery);
-      setResults(searchResults.results);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : '검색 중 오류가 발생했습니다.');
-      setResults([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+      try {
+        setLoading(true);
+        setError(null);
+        const searchResults = await notionApiService.search(searchQuery);
+        setResults(searchResults.results);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : '검색 중 오류가 발생했습니다.');
+        setResults([]);
+      } finally {
+        setLoading(false);
+      }
+    }, 300), // 300ms 디바운스
+    []
+  );
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // 검색 핸들러
+  const handleSearch = useCallback((searchQuery: string) => {
+    setQuery(searchQuery);
+    debouncedSearch(searchQuery);
+  }, [debouncedSearch]);
+
+  // 폼 제출 핸들러
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
-    handleSearch(query);
-  };
+    debouncedSearch(query);
+  }, [query, debouncedSearch]);
 
-  const handleItemClick = (item: NotionPage | NotionDatabase) => {
+  // 아이템 클릭 핸들러
+  const handleItemClick = useCallback((item: NotionPage | NotionDatabase) => {
     if (onSelect) {
       onSelect(item);
     }
-  };
+  }, [onSelect]);
 
-  const getItemTitle = (item: NotionPage | NotionDatabase) => {
-    if ('properties' in item) {
-      return item.properties?.title?.title?.[0]?.plain_text || 
-             item.properties?.Name?.title?.[0]?.plain_text || 
-             '제목 없음';
+  // 입력 변경 핸들러
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    handleSearch(value);
+  }, [handleSearch]);
+
+  // 메모이제이션된 검색 결과
+  const searchResults = useMemo(() => {
+    if (loading) {
+      return (
+        <div className="p-4 text-center text-gray-500">
+          검색 중...
+        </div>
+      );
     }
-    return '제목 없음';
-  };
 
-  const getItemType = (item: NotionPage | NotionDatabase) => {
-    return 'url' in item ? '페이지' : '데이터베이스';
-  };
+    if (error) {
+      return (
+        <div className="p-4 text-center text-red-500">
+          {error}
+        </div>
+      );
+    }
+
+    if (results.length === 0 && query.trim()) {
+      return (
+        <div className="p-4 text-center text-gray-500">
+          검색 결과가 없습니다.
+        </div>
+      );
+    }
+
+    return (
+      <div className="max-h-96 overflow-y-auto">
+        {results.map((item, index) => (
+          <SearchResultItem
+            key={`${item.id || index}`}
+            item={item}
+            onClick={handleItemClick}
+          />
+        ))}
+      </div>
+    );
+  }, [loading, error, results, query, handleItemClick]);
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-bold mb-4">Notion 검색</h2>
-      
-      <form onSubmit={handleSubmit} className="mb-6">
-        <div className="flex gap-2">
+    <div className="w-full max-w-md mx-auto">
+      <form onSubmit={handleSubmit} className="mb-4">
+        <div className="relative">
           <input
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="검색어를 입력하세요..."
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={handleInputChange}
+            placeholder="Notion 페이지나 데이터베이스를 검색하세요..."
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-          >
-            {loading ? '검색 중...' : '검색'}
-          </button>
+          {loading && (
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+            </div>
+          )}
         </div>
       </form>
 
-      {error && (
-        <div className="text-red-500 mb-4">{error}</div>
-      )}
-
-      {results.length > 0 && (
-        <div className="space-y-2">
-          <h3 className="font-semibold text-lg">검색 결과</h3>
-          {results.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => handleItemClick(item)}
-              className="border rounded-lg p-4 hover:bg-gray-50 cursor-pointer transition-colors"
-            >
-              <div className="flex justify-between items-start">
-                <div>
-                  <h4 className="font-semibold">{getItemTitle(item)}</h4>
-                  <p className="text-sm text-gray-600">{getItemType(item)}</p>
-                  <p className="text-xs text-gray-500">
-                    생성일: {new Date(item.created_time).toLocaleDateString('ko-KR')}
-                  </p>
-                </div>
-                {('url' in item) && (
-                  <a
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="text-blue-600 hover:text-blue-800 text-sm"
-                  >
-                    보기 →
-                  </a>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {!loading && !error && results.length === 0 && query && (
-        <div className="text-gray-500 text-center py-8">
-          검색 결과가 없습니다.
-        </div>
-      )}
+      {/* 검색 결과 */}
+      <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+        {searchResults}
+      </div>
     </div>
   );
 };
 
-export default NotionSearch; 
+export default React.memo(NotionSearch); 
