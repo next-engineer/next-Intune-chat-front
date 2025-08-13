@@ -7,8 +7,9 @@ import { Label } from '@/commons/components/ui/label';
 import { MBTISelector } from '@/commons/components/ui/mbti-selector';
 import { RadioGroup, RadioGroupItem } from '@/commons/components/ui/radio-group';
 import { Avatar, AvatarFallback, AvatarImage } from '@/commons/components/ui/avatar';
-import { Upload, Check, X, Loader2, Save, ArrowLeft } from 'lucide-react';
+import { Upload, Check, X, Loader2, Save, ArrowLeft, Trash2 } from 'lucide-react';
 import { hashPassword } from '@/commons/utils/hashUtils';
+
 
 interface ProfileFormData {
   email: string;
@@ -70,6 +71,11 @@ export function ProfileEditForm() {
         address: "서울시 강남구", // 기본값
         mbti: "ENFP", // 기본값
       }));
+      
+      // 기존 프로필 이미지가 있다면 미리보기로 설정
+      if (user.avatar) {
+        setProfilePreview(user.avatar);
+      }
     }
   }, [user]);
 
@@ -85,12 +91,34 @@ export function ProfileEditForm() {
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      setFormData(prev => ({ ...prev, profileImage: file }));
-      const reader = new FileReader();
-      reader.onload = (e) => setProfilePreview(e.target?.result as string);
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    // 파일 크기 검증 (5MB 이하)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("파일 크기는 5MB 이하여야 합니다.");
+      return;
     }
+
+    // 정확한 파일 형식 검증 (MIME 타입 + 확장자)
+    const allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    const allowedExtensions = ["png", "jpg", "jpeg"];
+    const fileExtension = file.name.split(".").pop()?.toLowerCase();
+
+    // MIME 타입과 확장자 모두 검증
+    if (!allowedMimeTypes.includes(file.type) || !fileExtension || !allowedExtensions.includes(fileExtension)) {
+      alert("PNG 또는 JPG 형식의 파일만 업로드할 수 있습니다.");
+      return;
+    }
+
+    setFormData(prev => ({ ...prev, profileImage: file }));
+    const reader = new FileReader();
+    reader.onload = (e) => setProfilePreview(e.target?.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  const handleImageRemove = () => {
+    setFormData(prev => ({ ...prev, profileImage: undefined }));
+    setProfilePreview("");
   };
 
   const validateEmail = (email: string): boolean => {
@@ -186,6 +214,7 @@ export function ProfileEditForm() {
         id: user!.id,
         email: formData.email,
         name: formData.name,
+        avatar: profilePreview || user!.avatar, // 프로필 이미지 업데이트
         isAdmin: user!.isAdmin,
       };
 
@@ -254,18 +283,46 @@ export function ProfileEditForm() {
         <div className="space-y-3">
           <Label className="text-sm font-medium text-gray-900 dark:text-white">프로필 이미지</Label>
           <div className="flex flex-col items-center space-y-3">
-                         <Avatar className="w-24 h-24">
-               <AvatarImage src={profilePreview || "/placeholder.svg"} />
-               <AvatarFallback>
-                 <Upload className="w-8 h-8 text-gray-400 dark:text-gray-500" />
-               </AvatarFallback>
-             </Avatar>
-            <label className="cursor-pointer">
-              <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
-              <IntuneButton type="button" variant="outline" size="sm">
-                이미지 변경
-              </IntuneButton>
-            </label>
+            <div className="relative">
+              <Avatar className="w-24 h-24">
+                <AvatarImage src={profilePreview || "/placeholder.svg"} />
+                <AvatarFallback>
+                  <Upload className="w-8 h-8 text-gray-400 dark:text-gray-500" />
+                </AvatarFallback>
+              </Avatar>
+              {profilePreview && (
+                <button
+                  type="button"
+                  onClick={handleImageRemove}
+                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                  title="이미지 제거"
+                >
+                  <Trash2 className="w-3 h-3" />
+                </button>
+              )}
+            </div>
+            <div className="flex gap-2">
+              <label className="cursor-pointer">
+                <input type="file" accept="image/jpeg,image/jpg,image/png" onChange={handleImageUpload} className="hidden" />
+                <IntuneButton type="button" variant="outline" size="sm">
+                  이미지 변경
+                </IntuneButton>
+              </label>
+              {profilePreview && (
+                <IntuneButton 
+                  type="button" 
+                  variant="outline" 
+                  size="sm"
+                  onClick={handleImageRemove}
+                  className="text-red-600 hover:text-red-700"
+                >
+                  이미지 제거
+                </IntuneButton>
+              )}
+            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+              JPG, PNG 형식, 최대 5MB
+            </p>
           </div>
         </div>
 
@@ -392,6 +449,9 @@ export function ProfileEditForm() {
             </div>
           )}
         </div>
+
+
+
 
         {/* 저장 버튼 */}
         <div className="flex gap-4 pt-6">

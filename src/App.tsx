@@ -43,6 +43,10 @@ const MatchPage = lazy(() => import('./pages/user/match'));
 const ProfileEditPage = lazy(() => import('./pages/user/profile'));
 const OnboardingPage = lazy(() => import('./pages/onboarding'));
 
+// 관리자 페이지 컴포넌트들
+const AdminDashboardPage = lazy(() => import('./pages/admin/dashboard'));
+const AdminUsersPage = lazy(() => import('./pages/admin/users'));
+
 /**
  * App 컴포넌트
  * - 라우터 컨테이너 및 라우트 정의를 렌더링합니다.
@@ -82,6 +86,10 @@ function App() {
               <Route path="/matching" element={<MatchPage />} />
               <Route path="/profile" element={<ProfileEditPage />} />
               <Route path="/profile/edit" element={<ProfileEditPage />} />
+              
+              {/* 관리자 페이지 */}
+              <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+              <Route path="/admin/users" element={<AdminUsersPage />} />
               
               {/* 404 페이지 - 모든 경로에 대해 홈페이지로 리다이렉트 */}
               <Route path="*" element={<HomePage />} />
