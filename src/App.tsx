@@ -40,6 +40,8 @@ const NotionPage = lazy(() => import('./pages/notion'));
 const SignInPage = lazy(() => import('./pages/user/signIn'));
 const SignUpPage = lazy(() => import('./pages/user/signUp'));
 const MatchPage = lazy(() => import('./pages/user/match'));
+const ProfileEditPage = lazy(() => import('./pages/user/profile'));
+const OnboardingPage = lazy(() => import('./pages/onboarding'));
 
 /**
  * App 컴포넌트
@@ -55,14 +57,17 @@ function App() {
           <Suspense fallback={<LoadingSpinner />}>
             {/* 주요 라우트 매핑 */}
             <Routes>
-              {/* 홈 페이지 (루트) */}
-              <Route path="/" element={<HomePage />} />
-              <Route path="/home" element={<HomePage />} />
+                          {/* 온보딩 페이지 */}
+            <Route path="/onboarding" element={<OnboardingPage />} />
+            
+            {/* 홈 페이지 (루트) */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/home" element={<HomePage />} />
               
               {/* 채팅 관련 페이지 */}
               <Route path="/chat/list" element={<ChatListPage />} />
-              <Route path="/chat/room" element={<ChatRoomPage />} />
-              <Route path="/chat/:roomId" element={<ChatRoomPage />} />
+              {/* 채팅방 상세 페이지 - roomId 파라미터로 특정 채팅방 접근 */}
+              <Route path="/chat/room/:roomId" element={<ChatRoomPage />} />
               
               {/* 핑퐁 기능 페이지 */}
               <Route path="/pingpong" element={<PingPongPage />} />
@@ -75,6 +80,8 @@ function App() {
               <Route path="/signup" element={<SignUpPage />} />
               <Route path="/match" element={<MatchPage />} />
               <Route path="/matching" element={<MatchPage />} />
+              <Route path="/profile" element={<ProfileEditPage />} />
+              <Route path="/profile/edit" element={<ProfileEditPage />} />
               
               {/* 404 페이지 - 모든 경로에 대해 홈페이지로 리다이렉트 */}
               <Route path="*" element={<HomePage />} />

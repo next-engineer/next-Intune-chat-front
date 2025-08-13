@@ -38,14 +38,14 @@ export function MBTISelector({ value, onChange, error }: MBTISelectorProps) {
               "p-3 text-sm font-medium rounded-intune border-2 transition-all min-h-touch",
               value === type
                 ? "border-primary bg-primary text-white"
-                : "border-gray-300 text-gray-700 hover:border-primary hover:text-primary",
+                : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-primary hover:text-primary dark:hover:text-primary",
             )}
           >
             {type}
           </button>
         ))}
       </div>
-      {error && <p className="text-sm text-danger">{error}</p>}
+      {error && <p className="text-sm text-danger dark:text-red-400">{error}</p>}
     </div>
   )
 }

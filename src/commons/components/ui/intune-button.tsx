@@ -19,8 +19,8 @@ export const IntuneButton = forwardRef<HTMLButtonElement, IntuneButtonProps>(
           {
             "bg-primary hover:bg-primary/90 text-white shadow-md hover:shadow-lg": variant === "primary",
             "bg-secondary hover:bg-secondary/90 text-white shadow-md hover:shadow-lg": variant === "secondary",
-            "border-2 border-primary text-primary hover:bg-primary hover:text-white": variant === "outline",
-            "text-primary hover:bg-primary/10": variant === "ghost",
+            "border-2 border-primary text-primary dark:text-white hover:bg-primary hover:text-white !bg-transparent dark:!bg-transparent": variant === "outline",
+            "text-primary dark:text-white hover:bg-primary/10": variant === "ghost",
           },
           {
             "px-4 py-2 text-sm": size === "sm",
