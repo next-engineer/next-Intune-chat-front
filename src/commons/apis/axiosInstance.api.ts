@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { API_ENDPOINTS } from '../../constants/endPoint.constants';
+import { config } from '../../constants/config';
 
 export const axiosInstance = axios.create({
   baseURL: API_ENDPOINTS.BASE_URL,
-  timeout: 10000,
+  timeout: config.API_TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
   },

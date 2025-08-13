@@ -7,6 +7,7 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import AuthInitializer from './components/AuthInitializer';
+import ConfigDisplay from './components/ConfigDisplay';
 
 // 로딩 컴포넌트
 const LoadingSpinner = () => (
@@ -95,6 +96,9 @@ function App() {
               <Route path="*" element={<HomePage />} />
             </Routes>
           </Suspense>
+          
+          {/* 환경 변수 설정 디버그 컴포넌트 (개발 모드에서만 표시) */}
+          <ConfigDisplay />
         </div>
       </Router>
     </AuthInitializer>
