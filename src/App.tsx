@@ -33,8 +33,6 @@ const ErrorFallback = () => (
 
 // 지연 로딩을 위한 페이지 컴포넌트들
 const HomePage = lazy(() => import('./pages/home'));
-const SimpleTestPage = lazy(() => import('./pages/chat/simple-test'));
-const ChatTestPage = lazy(() => import('./pages/chat/test'));
 const ChatListPage = lazy(() => import('./pages/chat/list'));
 const ChatRoomPage = lazy(() => import('./pages/chat/room'));
 const PingPongPage = lazy(() => import('./pages/pingpong'));
@@ -62,8 +60,6 @@ function App() {
               <Route path="/home" element={<HomePage />} />
               
               {/* 채팅 관련 페이지 */}
-              <Route path="/simple-test" element={<SimpleTestPage />} />
-              <Route path="/chat/test" element={<ChatTestPage />} />
               <Route path="/chat/list" element={<ChatListPage />} />
               <Route path="/chat/room" element={<ChatRoomPage />} />
               <Route path="/chat/:roomId" element={<ChatRoomPage />} />

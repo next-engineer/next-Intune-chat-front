@@ -52,7 +52,7 @@ export default function MatchingPage() {
       profileImage: match.profileImage,
       matchedAt: new Date().toISOString().split("T")[0],
       status: "active" as const,
-      lastMessage: "", // lastMessage 필드를 추가하여 타입 오류를 방지합니다.
+      lastMessage: "",
     }
     setMatchHistory((prev) => [newMatch, ...prev])
   }

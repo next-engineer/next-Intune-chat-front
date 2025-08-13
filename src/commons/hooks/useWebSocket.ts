@@ -13,7 +13,7 @@ export const useWebSocket = (userId: string, username: string) => {
   useEffect(() => {
     if (!isConnected.current) {
       websocketService.connect(userId, username);
-      websocketService.onStatusUpdate(setUsers);
+      websocketService.setStatusUpdateCallback(setUsers);
       isConnected.current = true;
     }
 

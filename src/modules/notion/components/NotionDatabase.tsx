@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { notionApiService, NotionDatabase, NotionPage } from '../../../commons/apis/notion.api';
+import { notionApiService, type NotionDatabase, type NotionPage } from '../../../commons/apis/notion.api';
 
 interface NotionDatabaseProps {
   databaseId: string;

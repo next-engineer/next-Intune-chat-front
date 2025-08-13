@@ -15,10 +15,13 @@ import {
   Info,
   Sun,
   Moon,
-  Palette
+  Palette,
+  Shield,
+  Database
 } from 'lucide-react';
 import { Button } from '@/commons/components/ui/button';
 import { useThemeStore } from '@/stores/themeStore';
+import { useAuthStore } from '@/stores/authStore';
 
 interface HamburgerMenuProps {
   user?: {
@@ -33,12 +36,14 @@ interface MenuItem {
   path: string;
   description: string;
   action?: () => void;
+  adminOnly?: boolean;
 }
 
 export function HamburgerMenu({ user }: HamburgerMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { isDarkMode, toggleDarkMode } = useThemeStore();
+  const { isAdmin, logout } = useAuthStore();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -50,6 +55,12 @@ export function HamburgerMenu({ user }: HamburgerMenuProps) {
 
   const handleNavigation = (path: string) => {
     navigate(path);
+    closeMenu();
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
     closeMenu();
   };
 
@@ -72,11 +83,13 @@ export function HamburgerMenu({ user }: HamburgerMenuProps) {
       path: '/chat/list',
       description: '채팅 목록 보기'
     },
+    // 관리자만 핑퐁 테스트 메뉴 보이기
     {
       icon: <Users className="h-5 w-5" />,
       label: '핑퐁 테스트',
       path: '/pingpong',
-      description: '연결 상태 테스트'
+      description: '연결 상태 테스트',
+      adminOnly: true
     },
     {
       icon: <Bell className="h-5 w-5" />,
@@ -116,13 +129,31 @@ export function HamburgerMenu({ user }: HamburgerMenuProps) {
       label: '로그아웃',
       path: '/logout',
       description: '계정에서 로그아웃',
-      action: () => {
-        // 로그아웃 로직
-        console.log('로그아웃');
-        closeMenu();
-      }
+      action: handleLogout
     }
   ];
+
+  // 관리자 전용 메뉴
+  const adminMenuItems: MenuItem[] = [
+    {
+      icon: <Database className="h-5 w-5" />,
+      label: '관리자 대시보드',
+      path: '/admin',
+      description: '시스템 관리',
+      adminOnly: true
+    },
+    {
+      icon: <Shield className="h-5 w-5" />,
+      label: '사용자 관리',
+      path: '/admin/users',
+      description: '사용자 목록 및 관리',
+      adminOnly: true
+    }
+  ];
+
+  // 권한에 따라 메뉴 필터링
+  const filteredMenuItems = menuItems.filter(item => !item.adminOnly || isAdmin);
+  const filteredAdminMenuItems = adminMenuItems.filter(item => isAdmin);
 
   return (
     <div className="relative">
@@ -172,9 +203,16 @@ export function HamburgerMenu({ user }: HamburgerMenuProps) {
                   {user.name.charAt(0).toUpperCase()}
                 </span>
               </div>
-              <div>
-                <p className="font-medium text-gray-900 dark:text-white">{user.name}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">로그인됨</p>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <p className="font-medium text-gray-900 dark:text-white">{user.name}</p>
+                  {isAdmin && (
+                    <Shield className="w-4 h-4 text-red-600" />
+                  )}
+                </div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {isAdmin ? '관리자' : '일반 사용자'}
+                </p>
               </div>
             </div>
           </div>
@@ -183,12 +221,36 @@ export function HamburgerMenu({ user }: HamburgerMenuProps) {
         {/* 메뉴 항목들 */}
         <div className="flex-1 overflow-y-auto">
           <div className="p-2">
+            {/* 관리자 메뉴 */}
+            {isAdmin && filteredAdminMenuItems.length > 0 && (
+              <div className="mb-4">
+                <h3 className="px-3 py-2 text-xs font-semibold text-red-600 uppercase tracking-wider">
+                  관리자
+                </h3>
+                {filteredAdminMenuItems.map((item, index) => (
+                  <button
+                    key={index}
+                    onClick={() => item.action ? item.action() : handleNavigation(item.path)}
+                    className="w-full flex items-center space-x-3 px-3 py-3 text-left text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors group"
+                  >
+                    <div className="text-red-500 group-hover:text-red-600 transition-colors">
+                      {item.icon}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium">{item.label}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{item.description}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+
             {/* 메인 메뉴 */}
             <div className="mb-4">
               <h3 className="px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                 메인
               </h3>
-              {menuItems.map((item, index) => (
+              {filteredMenuItems.map((item, index) => (
                 <button
                   key={index}
                   onClick={() => item.action ? item.action() : handleNavigation(item.path)}

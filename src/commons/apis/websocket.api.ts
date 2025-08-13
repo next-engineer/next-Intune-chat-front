@@ -13,8 +13,8 @@ class WebSocketService {
   private maxReconnectAttempts = 5;
   private reconnectDelay = 1000;
   private isConnecting = false;
-  private onStatusUpdate: ((users: UserStatus[]) => void) | null = null;
-  private onConnectionChange: ((isConnected: boolean) => void) | null = null;
+  private _onStatusUpdate: ((users: UserStatus[]) => void) | null = null;
+  private _onConnectionChange: ((isConnected: boolean) => void) | null = null;
 
   constructor() {
     this.handleMessage = this.handleMessage.bind(this);
@@ -43,7 +43,7 @@ class WebSocketService {
         this.isConnecting = false;
         this.reconnectAttempts = 0;
         this.startPingInterval();
-        this.onConnectionChange?.(true);
+        this._onConnectionChange?.(true);
       };
 
       this.ws.onmessage = this.handleMessage;
@@ -68,7 +68,7 @@ class WebSocketService {
       this.ws = null;
     }
 
-    this.onConnectionChange?.(false);
+    this._onConnectionChange?.(false);
   }
 
   /**
@@ -143,8 +143,8 @@ class WebSocketService {
           break;
 
         case "status_update":
-          if (this.onStatusUpdate && message.data) {
-            this.onStatusUpdate(message.data);
+          if (this._onStatusUpdate && message.data) {
+            this._onStatusUpdate(message.data);
           }
           break;
 
@@ -163,7 +163,7 @@ class WebSocketService {
     console.log("WebSocket 연결 종료:", event.code, event.reason);
     this.stopPingInterval();
     this.clearPongTimeout();
-    this.onConnectionChange?.(false);
+    this._onConnectionChange?.(false);
 
     if (event.code !== 1000) {
       // 정상 종료가 아닌 경우
@@ -176,7 +176,7 @@ class WebSocketService {
    */
   private handleError(error: Event): void {
     console.error("WebSocket 오류:", error);
-    this.onConnectionChange?.(false);
+    this._onConnectionChange?.(false);
   }
 
   /**
@@ -223,15 +223,15 @@ class WebSocketService {
   /**
    * 상태 업데이트 콜백을 설정합니다.
    */
-  onStatusUpdate(callback: (users: UserStatus[]) => void): void {
-    this.onStatusUpdate = callback;
+  setStatusUpdateCallback(callback: (users: UserStatus[]) => void): void {
+    this._onStatusUpdate = callback;
   }
 
   /**
    * 연결 상태 변경 콜백을 설정합니다.
    */
-  onConnectionChange(callback: (isConnected: boolean) => void): void {
-    this.onConnectionChange = callback;
+  setConnectionChangeCallback(callback: (isConnected: boolean) => void): void {
+    this._onConnectionChange = callback;
   }
 
   /**

@@ -12,10 +12,29 @@ const notionApi = axios.create({
   },
 });
 
+// Notion Rich Text 인터페이스
+export interface NotionRichText {
+  type: string;
+  text: {
+    content: string;
+    link: string | null;
+  };
+  annotations: {
+    bold: boolean;
+    italic: boolean;
+    strikethrough: boolean;
+    underline: boolean;
+    code: boolean;
+    color: string;
+  };
+  plain_text: string;
+  href: string | null;
+}
+
 // Notion API 인터페이스 정의
 export interface NotionDatabase {
   id: string;
-  title: string;
+  title: NotionRichText[];
   properties: Record<string, any>;
   created_time: string;
   last_edited_time: string;
@@ -23,7 +42,7 @@ export interface NotionDatabase {
 
 export interface NotionPage {
   id: string;
-  title: string;
+  title: NotionRichText[];
   properties: Record<string, any>;
   created_time: string;
   last_edited_time: string;

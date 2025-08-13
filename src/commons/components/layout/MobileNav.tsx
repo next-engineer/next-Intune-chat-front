@@ -1,15 +1,18 @@
-import { Home, Heart, MessageCircle, User } from "lucide-react"
+
+import { Home, Heart, MessageCircle, User, Users } from "lucide-react"
 import { cn } from "@/commons/utils"
 import { useNavigate, useLocation } from "react-router-dom"
+import { useAuthStore } from "@/stores/authStore"
 
 interface MobileNavProps {
-  activeTab?: "home" | "match" | "chat" | "my"
-  onTabChange?: (tab: "home" | "match" | "chat" | "my") => void
+  activeTab?: "home" | "match" | "chat" | "my" | "pingpong"
+  onTabChange?: (tab: "home" | "match" | "chat" | "my" | "pingpong") => void
 }
 
 export function MobileNav({ activeTab, onTabChange }: MobileNavProps) {
   const navigate = useNavigate()
   const location = useLocation()
+  const { isAdmin } = useAuthStore()
 
   // Determine active tab based on current path
   const getCurrentTab = () => {
@@ -17,17 +20,25 @@ export function MobileNav({ activeTab, onTabChange }: MobileNavProps) {
     if (location.pathname.startsWith("/matching")) return "match"
     if (location.pathname.startsWith("/chat")) return "chat"
     if (location.pathname.startsWith("/my")) return "my"
+    if (location.pathname.startsWith("/pingpong")) return "pingpong"
     return activeTab || "home"
   }
 
   const currentTab = getCurrentTab()
 
-  const tabs = [
+  const baseTabs = [
     { id: "home" as const, label: "홈", icon: Home, path: "/" },
     { id: "match" as const, label: "매칭", icon: Heart, path: "/matching" },
     { id: "chat" as const, label: "채팅", icon: MessageCircle, path: "/chat" },
     { id: "my" as const, label: "마이페이지", icon: User, path: "/my" },
   ]
+
+  // 관리자만 핑퐁 테스트 탭 추가
+  const adminTabs = [
+    { id: "pingpong" as const, label: "핑퐁", icon: Users, path: "/pingpong" },
+  ]
+
+  const tabs = isAdmin ? [...baseTabs, ...adminTabs] : baseTabs
 
   const handleTabClick = (tab: (typeof tabs)[0]) => {
     onTabChange?.(tab.id)

@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { debounce } from '../../../commons/utils';
-import { notionApiService } from '../apis';
-import { NotionPage, NotionDatabase } from '../types';
+import { notionApiService, type NotionPage, type NotionDatabase } from '../../../commons/apis/notion.api';
 
 interface NotionSearchProps {
   onSelect?: (item: NotionPage | NotionDatabase) => void;

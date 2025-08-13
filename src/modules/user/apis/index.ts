@@ -1,6 +1,14 @@
-import axiosInstance from '../../../commons/apis/axiosInstance.api';
-import { API_ENDPOINTS } from '../../../constants/endPoint.constants';
-import { ApiErrorHandler } from '../../../commons/apis/error.api';
+import { axiosInstance } from '@/commons/apis/axiosInstance.api';
+import { API_ENDPOINTS } from '@/constants/endPoint.constants';
+import { ApiErrorHandler } from '@/commons/apis/error.api';
+
+export interface UserResponse {
+  id: string;
+  email: string;
+  name: string;
+  token: string;
+  createdAt?: string;
+}
 
 export interface SignInRequest {
   email: string;
@@ -13,11 +21,9 @@ export interface SignUpRequest {
   name: string;
 }
 
-export interface UserResponse {
-  id: string;
-  email: string;
-  name: string;
-  token: string;
+export interface DuplicateCheckResponse {
+  isAvailable: boolean;
+  message: string;
 }
 
 export const userApi = {
@@ -33,6 +39,24 @@ export const userApi = {
   signUp: async (data: SignUpRequest): Promise<UserResponse> => {
     try {
       const response = await axiosInstance.post(API_ENDPOINTS.USER.SIGN_UP, data);
+      return response.data;
+    } catch (error) {
+      throw ApiErrorHandler.handle(error);
+    }
+  },
+
+  checkEmailDuplicate: async (email: string): Promise<DuplicateCheckResponse> => {
+    try {
+      const response = await axiosInstance.post(API_ENDPOINTS.USER.CHECK_EMAIL_DUPLICATE, { email });
+      return response.data;
+    } catch (error) {
+      throw ApiErrorHandler.handle(error);
+    }
+  },
+
+  checkNicknameDuplicate: async (nickname: string): Promise<DuplicateCheckResponse> => {
+    try {
+      const response = await axiosInstance.post(API_ENDPOINTS.USER.CHECK_NICKNAME_DUPLICATE, { nickname });
       return response.data;
     } catch (error) {
       throw ApiErrorHandler.handle(error);

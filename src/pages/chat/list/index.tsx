@@ -173,7 +173,7 @@ const ChatListPage: React.FC = () => {
                       <div className="flex items-center space-x-2">
                         {room.lastMessage && (
                           <span className="text-xs text-gray-500">
-                            {formatTime(room.lastMessage.timestamp)}
+                            {formatTime(room.lastMessage.timestamp.toString())}
                           </span>
                         )}
                         <button className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-gray-100 rounded">

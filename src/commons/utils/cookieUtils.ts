@@ -2,7 +2,10 @@
  * 쿠키 관리 유틸리티
  * - 쿠키 설정, 읽기, 삭제 기능을 제공합니다.
  * - 보안을 위한 HttpOnly, Secure 옵션을 지원합니다.
+ * - 해시 기반 토큰 관리를 지원합니다.
  */
+
+import { hashToken } from './hashUtils';
 
 /**
  * 쿠키 옵션 인터페이스
@@ -129,7 +132,8 @@ export const AUTH_COOKIES = {
   REFRESH_TOKEN: 'intune_refresh_token',
   USER_ID: 'intune_user_id',
   USER_NAME: 'intune_user_name',
-  USER_EMAIL: 'intune_user_email'
+  USER_EMAIL: 'intune_user_email',
+  USER_IS_ADMIN: 'intune_user_is_admin'
 } as const;
 
 /**
@@ -137,12 +141,15 @@ export const AUTH_COOKIES = {
  * @param accessToken 액세스 토큰
  * @param refreshToken 리프레시 토큰 (선택사항)
  */
-export const setAuthCookies = (accessToken: string, refreshToken?: string): void => {
+export const setAuthCookies = async (accessToken: string, refreshToken?: string): Promise<void> => {
+  // 토큰 해싱
+  const hashedAccessToken = await hashToken(accessToken);
+  
   // 액세스 토큰 (1시간 만료)
   const accessTokenExpires = new Date();
   accessTokenExpires.setHours(accessTokenExpires.getHours() + 1);
   
-  setCookie(AUTH_COOKIES.ACCESS_TOKEN, accessToken, {
+  setCookie(AUTH_COOKIES.ACCESS_TOKEN, hashedAccessToken, {
     expires: accessTokenExpires,
     secure: true,
     sameSite: 'Lax'
@@ -150,10 +157,11 @@ export const setAuthCookies = (accessToken: string, refreshToken?: string): void
 
   // 리프레시 토큰 (7일 만료)
   if (refreshToken) {
+    const hashedRefreshToken = await hashToken(refreshToken);
     const refreshTokenExpires = new Date();
     refreshTokenExpires.setDate(refreshTokenExpires.getDate() + 7);
     
-    setCookie(AUTH_COOKIES.REFRESH_TOKEN, refreshToken, {
+    setCookie(AUTH_COOKIES.REFRESH_TOKEN, hashedRefreshToken, {
       expires: refreshTokenExpires,
       secure: true,
       sameSite: 'Lax'
@@ -165,7 +173,7 @@ export const setAuthCookies = (accessToken: string, refreshToken?: string): void
  * 사용자 정보를 쿠키에 저장합니다.
  * @param user 사용자 정보
  */
-export const setUserCookies = (user: { id: string; name: string; email: string }): void => {
+export const setUserCookies = (user: { id: string; name: string; email: string; isAdmin?: boolean }): void => {
   const expires = new Date();
   expires.setDate(expires.getDate() + 7); // 7일 만료
 
@@ -186,22 +194,33 @@ export const setUserCookies = (user: { id: string; name: string; email: string }
     secure: true,
     sameSite: 'Lax'
   });
+
+  // isAdmin 정보 저장 (있는 경우에만)
+  if (user.isAdmin !== undefined) {
+    setCookie(AUTH_COOKIES.USER_IS_ADMIN, user.isAdmin.toString(), {
+      expires,
+      secure: true,
+      sameSite: 'Lax'
+    });
+  }
 };
 
 /**
  * 인증 쿠키에서 사용자 정보를 읽습니다.
  * @returns 사용자 정보 또는 null
  */
-export const getUserFromCookies = (): { id: string; name: string; email: string } | null => {
+export const getUserFromCookies = (): { id: string; name: string; email: string; isAdmin?: boolean } | null => {
   const userId = getCookie(AUTH_COOKIES.USER_ID);
   const userName = getCookie(AUTH_COOKIES.USER_NAME);
   const userEmail = getCookie(AUTH_COOKIES.USER_EMAIL);
+  const userIsAdmin = getCookie(AUTH_COOKIES.USER_IS_ADMIN);
 
   if (userId && userName && userEmail) {
     return {
       id: userId,
       name: userName,
-      email: userEmail
+      email: userEmail,
+      isAdmin: userIsAdmin === 'true'
     };
   }
 
@@ -233,6 +252,7 @@ export const clearAuthCookies = (): void => {
   deleteCookie(AUTH_COOKIES.USER_ID);
   deleteCookie(AUTH_COOKIES.USER_NAME);
   deleteCookie(AUTH_COOKIES.USER_EMAIL);
+  deleteCookie(AUTH_COOKIES.USER_IS_ADMIN);
 };
 
 /**

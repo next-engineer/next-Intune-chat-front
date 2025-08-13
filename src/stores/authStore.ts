@@ -20,6 +20,7 @@ interface User {
   id: string;
   email: string;
   name: string;
+  isAdmin?: boolean;
 }
 
 /**
@@ -32,6 +33,7 @@ interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   token: string | null;
+  isAdmin: boolean;
   setUser: (user: User, token: string, refreshToken?: string) => void;
   logout: () => void;
   initializeFromCookies: () => void;
@@ -43,11 +45,12 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       isAuthenticated: false,
       token: null,
+      isAdmin: false,
       
       // 로그인 성공 시 상태 업데이트 및 쿠키 설정
-      setUser: (user: User, token: string, refreshToken?: string) => {
-        // 쿠키에 인증 정보 저장
-        setAuthCookies(token, refreshToken);
+      setUser: async (user: User, token: string, refreshToken?: string) => {
+        // 쿠키에 인증 정보 저장 (해시된 토큰)
+        await setAuthCookies(token, refreshToken);
         setUserCookies(user);
         
         // Zustand 상태 업데이트
@@ -55,6 +58,7 @@ export const useAuthStore = create<AuthState>()(
           user,
           isAuthenticated: true,
           token,
+          isAdmin: user.isAdmin || user.email === 'admin@intune.com',
         });
       },
       
@@ -68,6 +72,7 @@ export const useAuthStore = create<AuthState>()(
           user: null,
           isAuthenticated: false,
           token: null,
+          isAdmin: false,
         });
       },
       
@@ -81,6 +86,7 @@ export const useAuthStore = create<AuthState>()(
             user,
             isAuthenticated: true,
             token,
+            isAdmin: user.isAdmin || user.email === 'admin@intune.com',
           });
         } else {
           // 쿠키가 유효하지 않으면 상태 초기화
@@ -88,6 +94,7 @@ export const useAuthStore = create<AuthState>()(
             user: null,
             isAuthenticated: false,
             token: null,
+            isAdmin: false,
           });
         }
       },
@@ -99,6 +106,7 @@ export const useAuthStore = create<AuthState>()(
         user: state.user,
         isAuthenticated: state.isAuthenticated,
         token: state.token,
+        isAdmin: state.isAdmin,
       }),
     }
   )

@@ -11,7 +11,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: 8080,
+    port: 5173,
     host: true,
   },
   build: {
@@ -43,7 +43,7 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
   },
   preview: {
-    port: 8080,
+    port: 5173,
     host: true,
   },
   // 의존성 최적화
