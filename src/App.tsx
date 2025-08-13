@@ -37,6 +37,7 @@ const HomePage = lazy(() => import('./pages/home'));
 const ChatListPage = lazy(() => import('./pages/chat/list'));
 const ChatRoomPage = lazy(() => import('./pages/chat/room'));
 const PingPongPage = lazy(() => import('./pages/pingpong'));
+const NetworkTestPage = lazy(() => import('./pages/network-test'));
 const NotionPage = lazy(() => import('./pages/notion'));
 const SignInPage = lazy(() => import('./pages/user/signIn'));
 const SignUpPage = lazy(() => import('./pages/user/signUp'));
@@ -76,6 +77,9 @@ function App() {
               
               {/* 핑퐁 기능 페이지 */}
               <Route path="/pingpong" element={<PingPongPage />} />
+              
+              {/* 네트워크 테스트 페이지 */}
+              <Route path="/network-test" element={<NetworkTestPage />} />
               
               {/* 노션 페이지 */}
               <Route path="/notion" element={<NotionPage />} />

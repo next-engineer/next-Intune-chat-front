@@ -143,7 +143,7 @@ export const AUTH_COOKIES = {
  */
 export const setAuthCookies = async (accessToken: string, refreshToken?: string): Promise<void> => {
   // 토큰 해싱
-  const hashedAccessToken = await hashToken(accessToken);
+  const hashedAccessToken = hashToken(accessToken);
   
   // 액세스 토큰 (1시간 만료)
   const accessTokenExpires = new Date();
@@ -157,7 +157,7 @@ export const setAuthCookies = async (accessToken: string, refreshToken?: string)
 
   // 리프레시 토큰 (7일 만료)
   if (refreshToken) {
-    const hashedRefreshToken = await hashToken(refreshToken);
+    const hashedRefreshToken = hashToken(refreshToken);
     const refreshTokenExpires = new Date();
     refreshTokenExpires.setDate(refreshTokenExpires.getDate() + 7);
     

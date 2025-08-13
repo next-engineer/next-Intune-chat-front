@@ -5,9 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:network": "cp env.network-test .env && vite",
+    "dev:local": "cp env.example .env && vite",
+    "dev:staging": "cp env.staging .env && vite",
+    "dev:production": "cp env.production .env && vite",
     "build": "tsc && vite build",
+    "build:network": "cp env.network-test .env && tsc && vite build",
+    "build:staging": "cp env.staging .env && tsc && vite build",
+    "build:production": "cp env.production .env && tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "preview:network": "cp env.network-test .env && vite preview --host",
+    "test:network": "echo '네트워크 테스트를 시작합니다...' && cp env.network-test .env && echo '환경 변수가 설정되었습니다. npm run dev:network를 실행하세요.'"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -43,9 +52,11 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
+    "cors": "^2.8.5",
     "date-fns": "4.1.0",
     "embla-carousel-react": "8.5.1",
     "emoji-picker-react": "^4.13.2",
+    "express": "^5.1.0",
     "geist": "^1.3.1",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",

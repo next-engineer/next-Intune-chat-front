@@ -118,13 +118,21 @@ export function LoginForm() {
       // 테스트 계정에서 해당 이메일 찾기
       const testAccount = TEST_ACCOUNTS.find(account => account.email === formData.email)
       
+      console.log("입력된 이메일:", formData.email)
+      console.log("찾은 계정:", testAccount)
+      
       if (!testAccount) {
         throw new Error("계정을 찾을 수 없습니다.")
       }
       
       // 비밀번호 해시 검증
       const inputPasswordHash = simpleHash(formData.password)
+      console.log("입력된 비밀번호:", formData.password)
+      console.log("입력된 비밀번호 해시:", inputPasswordHash)
+      console.log("저장된 비밀번호 해시:", testAccount.passwordHash)
+      
       const isValidPassword = inputPasswordHash === testAccount.passwordHash
+      console.log("비밀번호 일치 여부:", isValidPassword)
       
       if (!isValidPassword) {
         throw new Error("비밀번호가 일치하지 않습니다.")
