@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { UserStatus } from "../types/websocket.types";
+import { UserStatus } from "../modules/user/types/websocket.types";
 
 interface UserStatusState {
   users: UserStatus[];

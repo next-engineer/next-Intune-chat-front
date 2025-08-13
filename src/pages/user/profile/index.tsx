@@ -1,6 +1,6 @@
 import React from "react"
-import { ProfileEditForm } from "@/components/auth/ProfileEditForm"
-import { MainLayout } from "@/components/layout/MainLayout"
+import { ProfileEditForm } from "@/modules/user/components/auth/ProfileEditForm"
+import { MainLayout } from "@/modules/user/components/layout/MainLayout"
 
 export default function ProfileEditPage() {
   return (

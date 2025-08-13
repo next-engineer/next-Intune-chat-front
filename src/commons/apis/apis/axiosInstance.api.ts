@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_ENDPOINTS } from '../../constants/endPoint.constants';
+import { API_ENDPOINTS } from '../../../constants/endPoint.constants';
 
 // Member API용 axios 인스턴스 (8080)
 export const memberAxiosInstance = axios.create({

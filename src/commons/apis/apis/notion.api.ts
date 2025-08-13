@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_ENDPOINTS } from '../../constants/endPoint.constants';
+import { API_ENDPOINTS } from '../../../constants/endPoint.constants';
 
 // Notion API 클라이언트 생성
 const notionApi = axios.create({

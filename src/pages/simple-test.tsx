@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '../stores/authStore';
 import { useThemeStore } from '../stores/themeStore';
-import { getAllCookies, isLoggedInFromCookies, clearAuthCookies } from '../utils/cookieUtils';
+import { getAllCookies, isLoggedInFromCookies, clearAuthCookies } from '../commons/utils/utils/cookieUtils';
 
 const SimpleTestPage: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuthStore();

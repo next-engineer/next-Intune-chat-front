@@ -6,7 +6,7 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './css/App.css';
-import AuthInitializer from './components/AuthInitializer';
+import AuthInitializer from './modules/user/components/AuthInitializer';
 
 // 로딩 컴포넌트
 const LoadingSpinner = () => (

@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { MainLayout } from "@/components/layout/MainLayout"
-import { MatchingInterface } from "@/components/matching/MatchingInterface"
-import { MatchHistory } from "@/components/matching/MatchHistory"
+import { MainLayout } from "@/modules/user/components/layout/MainLayout"
+import { MatchingInterface } from "@/modules/user/components/matching/MatchingInterface"
+import { MatchHistory } from "@/modules/user/components/matching/MatchHistory"
 
 // Mock data
 const mockMatchHistory = [

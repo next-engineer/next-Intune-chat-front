@@ -13,7 +13,7 @@ import {
   getAccessTokenFromCookie,
   clearAuthCookies,
   isLoggedInFromCookies
-} from '../commons/utils/cookieUtils';
+} from '../commons/utils/utils/cookieUtils';
 
 /** 사용자 정보 타입 */
 interface User {
