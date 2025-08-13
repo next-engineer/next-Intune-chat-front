@@ -8,8 +8,8 @@ export const API_ENDPOINTS = {
     SIGN_IN: 'user/signin',
     SIGN_UP: 'user/signup',
     MATCH: 'user/match',
-    CHECK_EMAIL_DUPLICATE: 'users/check-email',
-    CHECK_NICKNAME_DUPLICATE: 'users/check-nickname',
+    CHECK_EMAIL_DUPLICATE: 'user/check-email',
+    CHECK_NICKNAME_DUPLICATE: 'user/check-name',
   },
   
   // Chat endpoints
