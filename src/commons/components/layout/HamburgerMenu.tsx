@@ -138,7 +138,7 @@ export function HamburgerMenu({ user }: HamburgerMenuProps) {
     {
       icon: <Database className="h-5 w-5" />,
       label: '관리자 대시보드',
-      path: '/admin',
+      path: '/admin/dashboard',
       description: '시스템 관리',
       adminOnly: true
     },
@@ -171,12 +171,19 @@ export function HamburgerMenu({ user }: HamburgerMenuProps) {
       {/* 메뉴 오버레이 제거됨 */}
 
       {/* 메뉴 패널 */}
-      <div className={`
-        fixed top-0 right-0 h-full w-80 bg-white dark:bg-gray-900 shadow-xl z-50 transform transition-transform duration-300 ease-in-out
-        ${isOpen ? 'translate-x-0' : 'translate-x-full'}
-      `}>
+      <div 
+        className={`
+          fixed top-0 right-0 h-full w-80 bg-white dark:bg-gray-900 shadow-xl z-50 transform transition-transform duration-300 ease-in-out backdrop-blur-sm
+          ${isOpen ? 'translate-x-0' : 'translate-x-full'}
+        `}
+        style={{
+          backgroundColor: isDarkMode ? '#111827' : '#ffffff',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)'
+        }}
+      >
         {/* 메뉴 헤더 */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">메뉴</h2>
           <Button
             variant="ghost"
@@ -213,7 +220,7 @@ export function HamburgerMenu({ user }: HamburgerMenuProps) {
         )}
 
         {/* 메뉴 항목들 */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto bg-white dark:bg-gray-900">
           <div className="p-2">
             {/* 관리자 메뉴 */}
             {isAdmin && filteredAdminMenuItems.length > 0 && (
@@ -358,7 +365,7 @@ export function HamburgerMenu({ user }: HamburgerMenuProps) {
         </div>
 
         {/* 메뉴 푸터 */}
-        <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
           <div className="text-center">
             <p className="text-xs text-gray-500 dark:text-gray-400">
               Intune Chat v0.1.0

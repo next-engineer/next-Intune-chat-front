@@ -69,10 +69,9 @@ export function MatchHistory({ matches, onSelectMatch }: MatchHistoryProps) {
         {matches.map((match) => (
           <div
             key={match.id}
-            onClick={() => match.status === "active" && onSelectMatch(match.id)}
             className={`p-4 rounded-intune border transition-colors ${
               match.status === "active"
-                ? "border-gray-200 hover:border-primary cursor-pointer hover:bg-primary/5"
+                ? "border-gray-200 hover:border-primary"
                 : "border-gray-100 bg-gray-50"
             }`}
           >
@@ -84,7 +83,16 @@ export function MatchHistory({ matches, onSelectMatch }: MatchHistoryProps) {
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2 mb-1">
-                  <h4 className="font-medium text-gray-900 truncate">{match.nickname}</h4>
+                  <h4 
+                    onClick={() => match.status === "active" && onSelectMatch(match.id)}
+                    className={`font-medium text-gray-900 truncate ${
+                      match.status === "active" 
+                        ? "cursor-pointer hover:text-primary hover:underline transition-colors" 
+                        : ""
+                    }`}
+                  >
+                    {match.nickname}
+                  </h4>
                   <span className="text-xs text-primary font-medium">{match.mbti}</span>
                   {getStatusBadge(match.status)}
                 </div>

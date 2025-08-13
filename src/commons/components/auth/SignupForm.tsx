@@ -6,7 +6,7 @@ import { MBTISelector } from "@/commons/components/ui/mbti-selector"
 import { Label } from "@/commons/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/commons/components/ui/radio-group"
 import { Avatar, AvatarFallback, AvatarImage } from "@/commons/components/ui/avatar"
-import { Upload, Check, X, Loader2, User } from "lucide-react"
+import { Upload, Check, X, Loader2 } from "lucide-react"
 import { userApi } from "@/modules/user/apis"
 import { hashPassword } from "@/commons/utils/hashUtils"
 
@@ -29,69 +29,7 @@ interface FormErrors {
   mbti?: string
 }
 
-// 테스트용 유저 데이터
-const TEST_USERS = [
-  {
-    name: "관리자",
-    email: "admin@intune.com",
-    password: "admin",
-    nickname: "admin",
-    gender: "M" as const,
-    address: "서울시 강남구",
-    mbti: "ENTJ",
-    isAdmin: true
-  },
-  {
-    name: "김테스터",
-    email: "test1@example.com",
-    password: "123456",
-    nickname: "테스터1",
-    gender: "M" as const,
-    address: "서울시 강남구",
-    mbti: "ENFP",
-    isAdmin: false
-  },
-  {
-    name: "이개발자",
-    email: "test2@example.com", 
-    password: "123456",
-    nickname: "개발자2",
-    gender: "F" as const,
-    address: "서울시 서초구",
-    mbti: "INTJ",
-    isAdmin: false
-  },
-  {
-    name: "박디자이너",
-    email: "test3@example.com",
-    password: "123456", 
-    nickname: "디자이너3",
-    gender: "F" as const,
-    address: "서울시 마포구",
-    mbti: "ISFP",
-    isAdmin: false
-  },
-  {
-    name: "최기획자",
-    email: "test4@example.com",
-    password: "123456",
-    nickname: "기획자4", 
-    gender: "M" as const,
-    address: "서울시 종로구",
-    mbti: "ENTP",
-    isAdmin: false
-  },
-  {
-    name: "정관리자",
-    email: "test5@example.com",
-    password: "123456",
-    nickname: "관리자5",
-    gender: "M" as const,
-    address: "서울시 영등포구", 
-    mbti: "ESTJ",
-    isAdmin: false
-  }
-]
+
 
 export function SignupForm() {
   const [formData, setFormData] = useState<SignupFormData>({
@@ -112,24 +50,7 @@ export function SignupForm() {
   const [nicknameChecking, setNicknameChecking] = useState(false)
   const [profilePreview, setProfilePreview] = useState<string>("")
 
-  // 테스트 유저 데이터 적용 함수
-  const applyTestUser = (testUser: typeof TEST_USERS[0]) => {
-    setFormData({
-      email: testUser.email,
-      password: testUser.password,
-      nickname: testUser.nickname,
-      gender: testUser.gender,
-      address: testUser.address,
-      mbti: testUser.mbti,
-    })
-    
-    // 중복 체크 상태 초기화
-    setEmailChecked(false)
-    setNicknameChecked(false)
-    setEmailAvailable(null)
-    setNicknameAvailable(null)
-    setErrors({})
-  }
+
 
   const handleInputChange = (field: keyof SignupFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -324,26 +245,7 @@ export function SignupForm() {
         <p className="text-subtext">Intune에서 새로운 인연을 만나보세요</p>
       </div>
 
-      {/* 테스트 유저 선택 섹션 */}
-      <div className="bg-blue-50 rounded-lg p-4">
-        <h3 className="text-sm font-semibold text-blue-900 mb-3 flex items-center gap-2">
-          <User className="w-4 h-4" />
-          테스트 유저 선택
-        </h3>
-        <div className="grid grid-cols-1 gap-2">
-          {TEST_USERS.map((user, index) => (
-            <button
-              key={index}
-              type="button"
-              onClick={() => applyTestUser(user)}
-              className="text-left p-2 bg-white rounded border border-blue-200 hover:bg-blue-100 transition-colors"
-            >
-              <div className="text-sm font-medium text-blue-900">{user.name}</div>
-              <div className="text-xs text-blue-600">{user.email} | {user.nickname} | {user.mbti}</div>
-            </button>
-          ))}
-        </div>
-      </div>
+
 
       {/* Profile Image Upload */}
       <div className="space-y-3">

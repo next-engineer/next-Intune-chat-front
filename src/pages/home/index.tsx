@@ -35,7 +35,7 @@ export default function HomePage() {
   const handleStartChat = () => {
     // TODO: Navigate to chat with matched user
     console.log("Starting chat with:", todayMatch.id)
-    navigate(`/chat/${todayMatch.id}`)
+    navigate(`/chat/room/${todayMatch.id}`)
   }
 
   const handleLogout = () => {

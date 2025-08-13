@@ -225,6 +225,7 @@ export interface ChatMessage {
   senderId: string;
   senderName: string;
   timestamp: Date;
+  imageUrl?: string; // 이미지 URL (선택적)
 }
 
 export interface ChatRoom {

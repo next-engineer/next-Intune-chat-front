@@ -58,12 +58,22 @@ export const verifyPassword = async (password: string, storedHash: string, store
 };
 
 /**
- * 토큰 해싱
+ * 토큰 해싱 (동기 버전)
  * @param data 토큰 데이터
  * @returns 해시된 토큰
  */
-export const hashToken = async (data: string): Promise<string> => {
-  return await createHash(data + Date.now().toString());
+export const hashToken = (data: string): string => {
+  // 간단한 해시 함수 (개발용)
+  let hash = 0;
+  if (data.length === 0) return hash.toString();
+  
+  for (let i = 0; i < data.length; i++) {
+    const char = data.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // 32bit 정수로 변환
+  }
+  
+  return Math.abs(hash).toString(16);
 };
 
 /**

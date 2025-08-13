@@ -1,24 +1,22 @@
-
-
-
+import { config } from './config';
 
 export const API_ENDPOINTS = {
-  BASE_URL: (import.meta as any).env?.VITE_API_URL || 'http://localhost:8080',
+  BASE_URL: config.API_URL,
   
   // User endpoints
   USER: {
-    SIGN_IN: '/api/auth/signin',
-    SIGN_UP: '/api/auth/signup',
-    MATCH: '/api/user/match',
-    CHECK_EMAIL_DUPLICATE: '/api/auth/check-email',
-    CHECK_NICKNAME_DUPLICATE: '/api/auth/check-nickname',
+    SIGN_IN: 'user/signin',
+    SIGN_UP: 'user/signup',
+    MATCH: 'user/match',
+    CHECK_EMAIL_DUPLICATE: 'user/check-email',
+    CHECK_NICKNAME_DUPLICATE: 'user/check-name',
   },
   
   // Chat endpoints
   CHAT: {
-    LIST: '/api/chat/list',
-    ROOM: '/api/chat/room',
-    SEND_MESSAGE: '/api/chat/message',
+    LIST: 'users/list',
+    ROOM: 'users/room',
+    SEND_MESSAGE: 'users/message',
   },
 
   // Notion API endpoints
@@ -32,8 +30,8 @@ export const API_ENDPOINTS = {
 
   // AWS WebSocket endpoints
   WEBSOCKET: {
-    CONNECT: (import.meta as any).env?.VITE_WEBSOCKET_URL || 'wss://your-api-gateway-url.execute-api.region.amazonaws.com/stage',
-    PING_INTERVAL: 30000, // 30초마다 핑
-    PONG_TIMEOUT: 10000,  // 10초 내에 퐁 응답 없으면 오프라인
+    CONNECT: config.WEBSOCKET_URL,
+    PING_INTERVAL: config.WEBSOCKET_PING_INTERVAL, // 30초마다 핑
+    PONG_TIMEOUT: config.WEBSOCKET_PONG_TIMEOUT,  // 10초 내에 퐁 응답 없으면 오프라인
   },
 } as const; 

@@ -60,11 +60,11 @@ export default function MatchingPage() {
   const handleStartChat = (matchId: string) => {
     // TODO: Navigate to chat with specific match
     console.log("Starting chat with match:", matchId)
-    navigate(`/chat/${matchId}`)
+    navigate(`/chat/room/${matchId}`)
   }
 
   const handleSelectMatch = (matchId: string) => {
-    navigate(`/chat/${matchId}`)
+    navigate(`/chat/room/${matchId}`)
   }
 
   return (

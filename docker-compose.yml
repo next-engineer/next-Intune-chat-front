@@ -1,0 +1,3 @@
+sudo mkdir -p /srv/intune
+sudo chown ec2-user:ec2-user /srv/intune
+cd /srv/intune
