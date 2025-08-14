@@ -11,7 +11,8 @@ RUN npm ci
 
 COPY --chown=node:node . .
 
-RUN chmod +x ./node_modules/.bin/tsc
+RUN chmod +x ./node_modules/.bin/tsc \
+    && chmod +x ./node_modules/.bin/vite
 
 RUN npm run build
 
