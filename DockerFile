@@ -8,6 +8,8 @@ RUN npm ci
 
 COPY . .
 
+RUN chown -R node:node /app
+
 RUN npm run build
 
 FROM node:18-alpine
@@ -20,7 +22,6 @@ COPY package*.json ./
 
 RUN npm ci --omit=dev
 
-RUN chown -R node:node /app
 
 USER node
 
