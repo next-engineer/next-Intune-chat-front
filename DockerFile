@@ -11,6 +11,8 @@ RUN npm ci
 
 COPY . .
 
+USER node
+
 RUN npm run build
 
 FROM node:18-alpine
