@@ -1,4 +1,4 @@
-FROM node:18-alpine AS builder
+FROM nginx:alpine AS builder
 
 RUN mkdir -p /app && chown -R node:node /app
 
@@ -7,7 +7,7 @@ WORKDIR /app
 USER node
 
 COPY --chown=node:node package*.json ./
-RUN npm ci
+RUN npm i
 
 COPY --chown=node:node . .
 
@@ -16,7 +16,7 @@ RUN chmod +x ./node_modules/.bin/tsc \
 
 RUN npm run build
 
-FROM node:18-alpine
+FROM nginx:alpine
 
 WORKDIR /app
 RUN chown -R node:node /app
@@ -27,7 +27,7 @@ COPY --from=builder --chown=node:node /app/dist ./dist
 
 COPY --chown=node:node package*.json ./
 
-RUN npm ci --omit=dev
+RUN npm i
 
 EXPOSE 8080
 
