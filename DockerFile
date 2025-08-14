@@ -10,6 +10,8 @@ COPY . .
 
 RUN chown -R node:node /app
 
+USER node
+
 RUN npm run build
 
 FROM node:18-alpine
@@ -21,9 +23,6 @@ COPY --from=builder /app/dist ./dist
 COPY package*.json ./
 
 RUN npm ci --omit=dev
-
-
-USER node
 
 EXPOSE 8080
 
