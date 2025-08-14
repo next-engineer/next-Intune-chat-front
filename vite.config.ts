@@ -43,7 +43,7 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
   },
   preview: {
-    port: 5173,
+    port: 8080,
     host: true,
   },
   // 의존성 최적화

@@ -9,7 +9,7 @@ const port = 8080;
 
 // CORS 설정
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://192.168.12.110:5173'],
+  origin: ['http://localhost:8080', 'http://192.168.12.110:8080'],
   credentials: true
 }));
 
