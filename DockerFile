@@ -1,16 +1,15 @@
 FROM node:18-alpine AS builder
 
+RUN mkdir -p /app && chown -R node:node /app
+
 WORKDIR /app
 
-COPY package*.json ./
+USER node
 
+COPY package*.json ./
 RUN npm ci
 
 COPY . .
-
-RUN chown -R node:node /app
-
-USER node
 
 RUN npm run build
 
@@ -26,4 +25,4 @@ RUN npm ci --omit=dev
 
 EXPOSE 8080
 
-CMD ["npm", "run", "dev"] 
+CMD ["npm", "run", "start"] 

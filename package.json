@@ -1,9 +1,11 @@
 {
   "name": "intune-front",
+  "main": "index.html",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
+    "start": "node dist/index.js",
     "dev": "vite",
     "dev:network": "cp env.network-test .env && vite",
     "dev:local": "cp env.example .env && vite",
