@@ -6,22 +6,23 @@ WORKDIR /app
 
 USER node
 
-COPY package*.json ./
+COPY --chown=node:node package*.json ./
 RUN npm ci
 
-COPY . .
-
-USER node
+COPY --chown=node:node . .
 
 RUN npm run build
 
 FROM node:18-alpine
 
 WORKDIR /app
+RUN chown -R node:node /app
 
-COPY --from=builder /app/dist ./dist
+USER node
 
-COPY package*.json ./
+COPY --from=builder --chown=node:node /app/dist ./dist
+
+COPY --chown=node:node package*.json ./
 
 RUN npm ci --omit=dev
 
