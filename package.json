@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "vite preview",
+    "start": "vite preview --port 8080 --host",
     "dev": "vite",
     "dev:network": "cp env.network-test .env && vite",
     "dev:local": "cp env.example .env && vite",
