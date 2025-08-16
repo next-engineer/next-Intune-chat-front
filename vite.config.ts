@@ -13,6 +13,11 @@ export default defineConfig({
   server: {
     port: 8080,
     host: true,
+    allowedHosts: [
+      '43.201.29.38',
+      'ec2-43-201-29-38.ap-northeast-2.compute.amazonaws.com',
+      'intune-elb-01-1312052410.ap-northeast-2.elb.amazonaws.com'
+    ]
   },
   build: {
     outDir: 'dist',
