@@ -41,7 +41,15 @@ jobs:
             aws ecr get-login-password --region ${{ secrets.AWS_REGION }} \
               | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
 
+            docker stop intune-container || true
+            docker rm intune-container || true
+
             docker pull ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:latest
-            cd /srv/intune
-            docker compose up -d
-            docker image prune -f
+
+            docker run -d \
+              --name intune-container \
+              --restart always \
+              -p 8080:80 \
+              ${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}:latest
+
+            docker image prune -f  
