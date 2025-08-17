@@ -10,10 +10,10 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  server: {
-    port: 8080,
-    host: true
-  },
+  // server: {
+  //   port: 8080,
+  //   host: true
+  // },
   build: {
     outDir: 'dist',
     sourcemap: false, // 프로덕션에서는 소스맵 비활성화

@@ -4,8 +4,8 @@
 
 // 환경 변수 타입 정의
 interface Config {
-  // API 설정
-  API_URL: string;
+  USER_API_URL: string;
+  CHAT_API_URL: string;
   API_TIMEOUT: number;
   
   // WebSocket 설정
@@ -59,7 +59,8 @@ const getEnvBoolean = (key: string, defaultValue: boolean) => {
 // 설정 객체 생성
 export const config: Config = {
   // API 설정
-  API_URL: getEnvVar('VITE_API_URL', 'http://localhost:8080'),
+  USER_API_URL: getEnvVar('VITE_USER_API_URL', 'http://localhost:8080'),
+  CHAT_API_URL: getEnvVar('VITE_CHAT_API_URL', 'http://localhost:8081'),
   API_TIMEOUT: getEnvNumber('VITE_API_TIMEOUT', 10000),
   
   // WebSocket 설정

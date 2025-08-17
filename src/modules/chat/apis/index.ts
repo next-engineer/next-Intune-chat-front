@@ -4,10 +4,10 @@
  *   프론트에서 Date 객체로 변환해 일관되게 사용합니다.
  * - 목록/상세/전송 응답 모두 공통 매핑 함수를 통해 정규화합니다.
  */
-import axiosInstance from '../../../commons/apis/axiosInstance.api';
-import { API_ENDPOINTS } from '../../../constants/endPoint.constants';
-import { ApiErrorHandler } from '../../../commons/apis/error.api';
-import { useAuthStore } from '../../../stores/authStore';
+import axiosInstance from "../../../commons/apis/axiosInstance.api";
+import { API_ENDPOINTS } from "../../../constants/endPoint.constants";
+import { ApiErrorHandler } from "../../../commons/apis/error.api";
+import { useAuthStore } from "../../../stores/authStore";
 
 /**
  * 지민과의 더미 대화 데이터
@@ -170,7 +170,7 @@ const JIMIN_DUMMY_MESSAGES: ChatMessage[] = [
     senderId: "jimin",
     senderName: "지민",
     timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000 + 35 * 60 * 1000), // 35분 후
-  }
+  },
 ];
 
 /**
@@ -212,7 +212,7 @@ const DUMMY_CHAT_ROOMS: ChatRoom[] = [
       timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3일 전
     },
     unreadCount: 0,
-  }
+  },
 ];
 
 /**
@@ -225,11 +225,10 @@ export interface ChatMessage {
   senderId: string;
   senderName: string;
   timestamp: Date;
-  imageUrl?: string; // 이미지 URL (선택적)
 }
 
 export interface ChatRoom {
-  id: string;
+  matchId: string;
   name: string;
   participants: string[];
   lastMessage?: ChatMessage;
@@ -249,13 +248,9 @@ export const chatApi = {
    */
   getChatList: async (): Promise<ChatRoom[]> => {
     try {
-      // 개발용: 더미 데이터 반환 (지민, 서연, 민지와의 채팅방)
-      return DUMMY_CHAT_ROOMS;
-      
-      // 실제 API 호출 (운영 환경에서 사용)
-      // const response = await axiosInstance.get(API_ENDPOINTS.CHAT.LIST);
-      // const rooms: any[] = response.data || [];
-      // return rooms.map(mapChatRoom);
+      const response = await axiosInstance.get(API_ENDPOINTS.CHAT.LIST);
+      const rooms: any[] = response.data.result || [];
+      return rooms.map(mapChatRoom);
     } catch (error) {
       throw ApiErrorHandler.handle(error);
     }
@@ -271,22 +266,22 @@ export const chatApi = {
     try {
       // 지민 채팅방: 22개의 더미 대화 메시지 반환
       if (roomId === "jimin") {
-        const room = DUMMY_CHAT_ROOMS.find(r => r.id === "jimin");
+        const room = DUMMY_CHAT_ROOMS.find((r) => r.id === "jimin");
         if (room) {
           // 실제 로그인한 사용자의 ID를 가져와서 내 메시지 구분
           const currentUserId = useAuthStore.getState().user?.id || "user_default";
-          const modifiedMessages = JIMIN_DUMMY_MESSAGES.map(msg => ({
+          const modifiedMessages = JIMIN_DUMMY_MESSAGES.map((msg) => ({
             ...msg,
-            senderId: msg.senderId === "current_user" ? currentUserId : msg.senderId
+            senderId: msg.senderId === "current_user" ? currentUserId : msg.senderId,
           }));
           return { room, messages: modifiedMessages };
         }
       }
-      
+
       // 다른 채팅방: 빈 메시지 목록 반환
-      const room = DUMMY_CHAT_ROOMS.find(r => r.id === roomId) || DUMMY_CHAT_ROOMS[0];
+      const room = DUMMY_CHAT_ROOMS.find((r) => r.id === roomId) || DUMMY_CHAT_ROOMS[0];
       return { room, messages: [] };
-      
+
       // 실제 API 호출 (운영 환경에서 사용)
       // const response = await axiosInstance.get(`${API_ENDPOINTS.CHAT.ROOM}/${roomId}`);
       // const data = response.data || {};
@@ -308,7 +303,7 @@ export const chatApi = {
       // 개발용: 실제 사용자 정보로 새 메시지 생성
       const currentUserId = useAuthStore.getState().user?.id || "user_default";
       const currentUserName = useAuthStore.getState().user?.name || "나";
-      
+
       const newMessage: ChatMessage = {
         id: "msg_" + Date.now(),
         content: data.content,
@@ -316,9 +311,9 @@ export const chatApi = {
         senderName: currentUserName,
         timestamp: new Date(),
       };
-      
+
       return newMessage;
-      
+
       // 실제 API 호출 (운영 환경에서 사용)
       // const response = await axiosInstance.post(API_ENDPOINTS.CHAT.SEND_MESSAGE, data);
       // return mapChatMessage(response.data);
@@ -326,7 +321,7 @@ export const chatApi = {
       throw ApiErrorHandler.handle(error);
     }
   },
-}; 
+};
 
 // 내부 유틸: UTF-8 문자열(ISO8601 또는 UNIX epoch 문자열/숫자)를 Date로 변환
 /**
@@ -336,8 +331,8 @@ export const chatApi = {
  */
 function toDate(value: unknown): Date {
   if (value instanceof Date) return value;
-  if (typeof value === 'number') return new Date(value);
-  if (typeof value === 'string') {
+  if (typeof value === "number") return new Date(value);
+  if (typeof value === "string") {
     // epoch 숫자 문자열 지원
     const trimmed = value.trim();
     if (/^\d{10,}$/.test(trimmed)) {
@@ -357,10 +352,10 @@ function toDate(value: unknown): Date {
  */
 function mapChatMessage(raw: any): ChatMessage {
   return {
-    id: String(raw?.id ?? ''),
-    content: String(raw?.content ?? ''),
-    senderId: String(raw?.senderId ?? ''),
-    senderName: String(raw?.senderName ?? ''),
+    id: String(raw?.id ?? ""),
+    content: String(raw?.content ?? ""),
+    senderId: String(raw?.senderId ?? ""),
+    senderName: String(raw?.senderName ?? ""),
     timestamp: toDate(raw?.timestamp),
   };
 }
@@ -370,8 +365,8 @@ function mapChatMessage(raw: any): ChatMessage {
  */
 function mapChatRoom(raw: any): ChatRoom {
   const base: ChatRoom = {
-    id: String(raw?.id ?? ''),
-    name: String(raw?.name ?? ''),
+    id: String(raw?.id ?? ""),
+    name: String(raw?.name ?? ""),
     participants: Array.isArray(raw?.participants) ? raw.participants.map(String) : [],
     unreadCount: Number(raw?.unreadCount ?? 0),
   };

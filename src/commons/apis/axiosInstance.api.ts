@@ -1,19 +1,19 @@
-import axios from 'axios';
-import { API_ENDPOINTS } from '../../constants/endPoint.constants';
-import { config } from '../../constants/config';
+import axios from "axios";
+import { config } from "../../constants/config";
+import { getCookie } from "../utils/cookieUtils";
 
 export const axiosInstance = axios.create({
-  baseURL: API_ENDPOINTS.BASE_URL,
   timeout: config.API_TIMEOUT,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
+  withCredentials: true, // 쿠키를 포함한 요청을 허용
 });
 
 // Request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = getCookie("access_token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -31,11 +31,11 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = '/signin';
+      localStorage.removeItem("token");
+      window.location.href = "/signin";
     }
     return Promise.reject(error);
   }
 );
 
-export default axiosInstance; 
+export default axiosInstance;

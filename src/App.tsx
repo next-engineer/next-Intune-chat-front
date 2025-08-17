@@ -38,16 +38,11 @@ const ChatListPage = lazy(() => import('./pages/chat/list'));
 const ChatRoomPage = lazy(() => import('./pages/chat/room'));
 const PingPongPage = lazy(() => import('./pages/pingpong'));
 const NetworkTestPage = lazy(() => import('./pages/network-test'));
-const NotionPage = lazy(() => import('./pages/notion'));
 const SignInPage = lazy(() => import('./pages/user/signIn'));
 const SignUpPage = lazy(() => import('./pages/user/signUp'));
 const MatchPage = lazy(() => import('./pages/user/match'));
 const ProfileEditPage = lazy(() => import('./pages/user/profile'));
 const OnboardingPage = lazy(() => import('./pages/onboarding'));
-
-// 관리자 페이지 컴포넌트들
-const AdminDashboardPage = lazy(() => import('./pages/admin/dashboard'));
-const AdminUsersPage = lazy(() => import('./pages/admin/users'));
 
 /**
  * App 컴포넌트
@@ -81,8 +76,6 @@ function App() {
               {/* 네트워크 테스트 페이지 */}
               <Route path="/network-test" element={<NetworkTestPage />} />
               
-              {/* 노션 페이지 */}
-              <Route path="/notion" element={<NotionPage />} />
               
               {/* 사용자 관련 페이지 */}
               <Route path="/signin" element={<SignInPage />} />
@@ -91,10 +84,6 @@ function App() {
               <Route path="/matching" element={<MatchPage />} />
               <Route path="/profile" element={<ProfileEditPage />} />
               <Route path="/profile/edit" element={<ProfileEditPage />} />
-              
-              {/* 관리자 페이지 */}
-              <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
-              <Route path="/admin/users" element={<AdminUsersPage />} />
               
               {/* 404 페이지 - 모든 경로에 대해 홈페이지로 리다이렉트 */}
               <Route path="*" element={<HomePage />} />

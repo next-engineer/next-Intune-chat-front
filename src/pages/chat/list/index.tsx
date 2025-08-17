@@ -3,26 +3,18 @@
  * - 사용자가 참여 중인 채팅방 목록을 불러와 표시합니다.
  * - 항목 클릭 시 해당 채팅방 상세로 이동합니다.
  */
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { chatApi, ChatRoom } from '../../../modules/chat/apis';
-import { MainLayout } from '../../../commons/components/layout/MainLayout';
-import { 
-  Search, 
-  Plus, 
-  MessageCircle, 
-  Users, 
-  Clock, 
-  MoreVertical,
-  Heart
-} from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { chatApi, ChatRoom } from "../../../modules/chat/apis";
+import { MainLayout } from "../../../commons/components/layout/MainLayout";
+import { Search, Plus, MessageCircle, Users, MoreVertical, Heart } from "lucide-react";
 
 const ChatListPage: React.FC = () => {
   const navigate = useNavigate();
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string>('');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [error, setError] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     // 최초 마운트 시 채팅방 목록 로딩
@@ -38,7 +30,7 @@ const ChatListPage: React.FC = () => {
       const rooms = await chatApi.getChatList();
       setChatRooms(rooms);
     } catch (err: any) {
-      setError(err.message || 'Failed to load chat rooms');
+      setError(err.message || "Failed to load chat rooms");
     } finally {
       setLoading(false);
     }
@@ -51,11 +43,11 @@ const ChatListPage: React.FC = () => {
 
   /** 매칭 페이지로 이동 (새 채팅 생성 진입점) */
   const handleFindMatch = () => {
-    navigate('/user/match');
+    navigate("/user/match");
   };
 
   /** 검색된 채팅방 필터링 */
-  const filteredRooms = chatRooms.filter(room =>
+  const filteredRooms = chatRooms.filter((room) =>
     room.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -64,13 +56,13 @@ const ChatListPage: React.FC = () => {
     const date = new Date(timestamp);
     const now = new Date();
     const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
-    
+
     if (diffInHours < 1) {
-      return '방금 전';
+      return "방금 전";
     } else if (diffInHours < 24) {
       return `${Math.floor(diffInHours)}시간 전`;
     } else {
-      return date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
+      return date.toLocaleDateString("ko-KR", { month: "short", day: "numeric" });
     }
   };
 
@@ -102,7 +94,7 @@ const ChatListPage: React.FC = () => {
               <span>새 매칭</span>
             </button>
           </div>
-          
+
           {/* 검색바 */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -139,7 +131,9 @@ const ChatListPage: React.FC = () => {
               ) : (
                 <div>
                   <Heart className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">아직 채팅방이 없습니다</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    아직 채팅방이 없습니다
+                  </h3>
                   <p className="text-gray-500 mb-6">새로운 매칭을 찾아 대화를 시작해보세요!</p>
                   <button
                     onClick={handleFindMatch}
@@ -154,8 +148,8 @@ const ChatListPage: React.FC = () => {
           ) : (
             filteredRooms.map((room) => (
               <div
-                key={room.id}
-                onClick={() => handleRoomClick(room.id)}
+                key={room.matchId}
+                onClick={() => handleRoomClick(room.matchId)}
                 className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all duration-200 cursor-pointer group"
               >
                 <div className="flex items-center space-x-3">
@@ -181,13 +175,13 @@ const ChatListPage: React.FC = () => {
                         </button>
                       </div>
                     </div>
-                    
+
                     {room.lastMessage && (
                       <p className="text-sm text-gray-600 truncate mt-1">
                         {room.lastMessage.content}
                       </p>
                     )}
-                    
+
                     <div className="flex items-center space-x-4 mt-2">
                       <div className="flex items-center space-x-1 text-xs text-gray-500">
                         <Users className="h-3 w-3" />
@@ -210,4 +204,4 @@ const ChatListPage: React.FC = () => {
   );
 };
 
-export default ChatListPage; 
+export default ChatListPage;

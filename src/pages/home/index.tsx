@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { MainLayout } from "@/commons/components/layout/MainLayout"
-import { MatchCard } from "@/commons/components/home/MatchCard"
-import { EmptyMatch } from "@/commons/components/home/EmptyMatch"
-import { useAuthStore } from "@/stores/authStore"
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { MainLayout } from "@/commons/components/layout/MainLayout";
+import { MatchCard } from "@/commons/components/home/MatchCard";
+import { EmptyMatch } from "@/commons/components/home/EmptyMatch";
+import { useAuthStore } from "@/stores/authStore";
 
 // Mock data - replace with actual API call
 const mockTodayMatch = {
@@ -11,40 +11,40 @@ const mockTodayMatch = {
   nickname: "민지",
   mbti: "ENFP",
   profileImage: "/friendly-woman.png",
-}
+};
 
 export default function HomePage() {
-  const navigate = useNavigate()
-  const { user, isAuthenticated, logout } = useAuthStore()
-  const [hasMatch, setHasMatch] = useState(false)
-  const [todayMatch, setTodayMatch] = useState(mockTodayMatch)
+  const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuthStore();
+  const [hasMatch, setHasMatch] = useState(false);
+  const [todayMatch, setTodayMatch] = useState(mockTodayMatch);
 
   // 로그인 상태 확인
   useEffect(() => {
     if (!isAuthenticated) {
       // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
-      navigate('/signin')
+      navigate("/signin");
     }
-  }, [isAuthenticated, navigate])
+  }, [isAuthenticated, navigate]);
 
   const handleStartMatching = () => {
     // Navigate to matching page instead of inline matching
-    navigate("/matching")
-  }
+    navigate("/chat/list");
+  };
 
   const handleStartChat = () => {
     // TODO: Navigate to chat with matched user
-    console.log("Starting chat with:", todayMatch.id)
-    navigate(`/chat/room/${todayMatch.id}`)
-  }
+    console.log("Starting chat with:", todayMatch.id);
+    navigate(`/chat/room/${todayMatch.id}`);
+  };
 
   const handleLogout = () => {
-    logout()
-    navigate('/signin')
-  }
+    logout();
+    navigate("/signin");
+  };
 
   // 로딩 중이거나 인증되지 않은 경우
-  if (!isAuthenticated || !user) {
+  if (!isAuthenticated) {
     return (
       <MainLayout>
         <div className="flex items-center justify-center min-h-screen">
@@ -54,16 +54,15 @@ export default function HomePage() {
           </div>
         </div>
       </MainLayout>
-    )
+    );
   }
 
   return (
-    <MainLayout user={user}>
+    <MainLayout>
       <div className="max-w-md mx-auto space-y-6">
         <div className="text-center space-y-2">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">오늘의 매칭</h1>
           <p className="text-subtext dark:text-gray-400">결이 닮은 사람과, 마음이 닿는 매칭</p>
-          <p className="text-sm text-gray-500 dark:text-gray-400">안녕하세요, {user.name}님! 👋</p>
         </div>
 
         {hasMatch ? (
@@ -92,5 +91,5 @@ export default function HomePage() {
         </div>
       </div>
     </MainLayout>
-  )
-} 
+  );
+}
