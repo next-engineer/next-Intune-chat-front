@@ -59,7 +59,7 @@ const getEnvBoolean = (key: string, defaultValue: boolean) => {
 // 설정 객체 생성
 export const config: Config = {
   // API 설정
-  USER_API_URL: getEnvVar('VITE_USER_API_URL', 'api.intune.member.nextcloudlab.com'),
+  USER_API_URL: getEnvVar('VITE_USER_API_URL', ''),
   CHAT_API_URL: getEnvVar('VITE_CHAT_API_URL', 'api.intune.chat.nextcloudlab.com'),
   API_TIMEOUT: getEnvNumber('VITE_API_TIMEOUT', 10000),
   
