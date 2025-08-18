@@ -1,0 +1,9 @@
+node_modules
+
+dist/
+
+.env
+
+# 백엔드 서버 폴더들 제외
+next-Intune-chat-server-main/
+next-Intune-member-server-main/
