@@ -59,8 +59,8 @@ const getEnvBoolean = (key: string, defaultValue: boolean) => {
 // 설정 객체 생성
 export const config: Config = {
   // API 설정
-  USER_API_URL: getEnvVar('VITE_USER_API_URL', 'http://localhost:8080'),
-  CHAT_API_URL: getEnvVar('VITE_CHAT_API_URL', 'http://localhost:8081'),
+  USER_API_URL: getEnvVar('VITE_USER_API_URL', 'api.intune.member.nextcloudlab.com:8081'),
+  CHAT_API_URL: getEnvVar('VITE_CHAT_API_URL', 'api.intune.chat.nextcloudlab.com:8081'),
   API_TIMEOUT: getEnvNumber('VITE_API_TIMEOUT', 10000),
   
   // WebSocket 설정
@@ -94,15 +94,15 @@ export const config: Config = {
 };
 
 // 환경 정보 출력 (개발 모드에서만)
-if (config.DEV_MODE && config.DEBUG_MODE) {
-  console.log('🌍 환경 설정 정보:', {
-    API_URL: config.API_URL,
-    WEBSOCKET_URL: config.WEBSOCKET_URL,
-    DEV_MODE: config.DEV_MODE,
-    DEBUG_MODE: config.DEBUG_MODE,
-    APP_NAME: config.APP_NAME,
-    APP_VERSION: config.APP_VERSION,
-  });
-}
+// if (config.DEV_MODE && config.DEBUG_MODE) {
+//   console.log('🌍 환경 설정 정보:', {
+//     API_URL: config.API_URL,
+//     WEBSOCKET_URL: config.WEBSOCKET_URL,
+//     DEV_MODE: config.DEV_MODE,
+//     DEBUG_MODE: config.DEBUG_MODE,
+//     APP_NAME: config.APP_NAME,
+//     APP_VERSION: config.APP_VERSION,
+//   });
+// }
 
 export default config;
