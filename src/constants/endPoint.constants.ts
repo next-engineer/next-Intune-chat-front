@@ -3,7 +3,7 @@ import { config } from "./config";
 export const API_ENDPOINTS = {
   // User endpoints
   USER: {
-    SIGN_IN: `${config.USER_API_URL}/user/sign-ins`,
+    SIGN_IN: `${config.USER_API_URL}/user/sign-in`,
     SIGN_UP: `${config.USER_API_URL}/user/sign-up`,
     MATCH: `${config.CHAT_API_URL}/chat/match`,
     CHECK_EMAIL_DUPLICATE: `${config.USER_API_URL}/user/check-email`,
