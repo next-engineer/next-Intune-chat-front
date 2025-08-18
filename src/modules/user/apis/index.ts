@@ -31,6 +31,7 @@ export interface DuplicateCheckResponse {
 export const userApi = {
   signIn: async (data: SignInRequest) => {
     try {
+      console.log("test : ", API_ENDPOINTS.USER.SIGN_IN)
       await axiosInstance.post(API_ENDPOINTS.USER.SIGN_IN, data);
     } catch (error) {
       throw ApiErrorHandler.handle(error);
