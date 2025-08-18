@@ -11,7 +11,7 @@ import { userApi } from "@/modules/user/apis";
 interface SignupFormData {
   email: string;
   password: string;
-  name: string;
+  nickname: string;
   gender: "M" | "F" | "";
   address: string;
   mbti: string;
@@ -30,7 +30,7 @@ export function SignupForm() {
   const [formData, setFormData] = useState<SignupFormData>({
     email: "",
     password: "",
-    name: "",
+    nickname: "",
     gender: "",
     address: "",
     mbti: "",
@@ -52,7 +52,7 @@ export function SignupForm() {
       setEmailChecked(false);
       setEmailAvailable(null);
     }
-    if (field === "name") {
+    if (field === "nickname") {
       setNicknameChecked(false);
       setNicknameAvailable(null);
     }
@@ -103,12 +103,12 @@ export function SignupForm() {
   };
 
   const checkNicknameDuplicate = async () => {
-    if (!formData.name) {
+    if (!formData.nickname) {
       setErrors((prev) => ({ ...prev, nickname: "닉네임을 입력해주세요." }));
       return;
     }
 
-    if (!validateNickname(formData.name)) {
+    if (!validateNickname(formData.nickname)) {
       setErrors((prev) => ({ ...prev, nickname: "닉네임은 2~20자 사이로 입력해주세요." }));
       return;
     }
@@ -117,7 +117,7 @@ export function SignupForm() {
     setErrors((prev) => ({ ...prev, nickname: "" }));
 
     try {
-      const response = await userApi.checkNicknameDuplicate(formData.name);
+      const response = await userApi.checkNicknameDuplicate(formData.nickname);
       setNicknameAvailable(response.available);
       setNicknameChecked(true);
 
@@ -159,9 +159,9 @@ export function SignupForm() {
     }
 
     // 닉네임 검증
-    if (!formData.name) {
+    if (!formData.nickname) {
       newErrors.nickname = "닉네임을 입력해주세요.";
-    } else if (!validateNickname(formData.name)) {
+    } else if (!validateNickname(formData.nickname)) {
       newErrors.nickname = "닉네임은 2~20자 사이로 입력해주세요.";
     } else if (!nicknameChecked) {
       newErrors.nickname = "닉네임 중복 확인을 해주세요.";
@@ -260,8 +260,8 @@ export function SignupForm() {
         <div className="flex-1">
           <IntuneInput
             label="닉네임"
-            value={formData.name}
-            onChange={(e) => handleInputChange("name", e.target.value)}
+            value={formData.nickname}
+            onChange={(e) => handleInputChange("nickname", e.target.value)}
             error={errors.nickname}
             success={nicknameAvailable === true ? "사용 가능한 닉네임입니다" : ""}
             required
