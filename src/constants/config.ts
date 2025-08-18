@@ -41,6 +41,7 @@ interface Config {
 // 환경 변수에서 값을 가져오는 함수
 const getEnvVar = (key: string, defaultValue?: any) => {
   const value = (import.meta as any).env?.[key];
+  console.log('value : ', value);
   return value !== undefined ? value : defaultValue;
 };
 
