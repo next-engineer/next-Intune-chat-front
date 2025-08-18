@@ -60,8 +60,8 @@ const getEnvBoolean = (key: string, defaultValue: boolean) => {
 // 설정 객체 생성
 export const config: Config = {
   // API 설정
-  USER_API_URL: getEnvVar('VITE_USER_API_URL', 'api.intune.member.nextcloudlab.com:8081'),
-  CHAT_API_URL: getEnvVar('VITE_CHAT_API_URL', 'api.intune.chat.nextcloudlab.com:8081'),
+  USER_API_URL: getEnvVar('VITE_USER_API_URL', 'http://api.intune.member.nextcloudlab.com:8081'),
+  CHAT_API_URL: getEnvVar('VITE_CHAT_API_URL', 'http://api.intune.chat.nextcloudlab.com:8081'),
   API_TIMEOUT: getEnvNumber('VITE_API_TIMEOUT', 10000),
   
   // WebSocket 설정
