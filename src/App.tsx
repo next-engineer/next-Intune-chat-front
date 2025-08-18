@@ -91,7 +91,7 @@ function App() {
           </Suspense>
           
           {/* 환경 변수 설정 디버그 컴포넌트 (개발 모드에서만 표시) */}
-          <ConfigDisplay />
+          {/* <ConfigDisplay /> */}
         </div>
       </Router>
     </AuthInitializer>

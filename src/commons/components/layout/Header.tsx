@@ -12,29 +12,29 @@ interface HeaderProps {
 }
 
 export function Header({ user }: HeaderProps) {
-  const { user: authUser, isAdmin } = useAuthStore()
+  // const { user: authUser } = useAuthStore()
   const navigate = useNavigate()
   
   // authStore의 사용자 정보를 우선 사용
-  const currentUser = authUser ? {
-    name: authUser.name,
-    avatar: user?.avatar
-  } : user
+  // const currentUser = authUser ? {
+  //   name: authUser.name,
+  //   avatar: user?.avatar
+  // } : user
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-gray-200 dark:border-gray-700 bg-white/95 dark:bg-gray-900/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-gray-900/60">
       <div className="container flex h-16 items-center justify-between px-4">
         <div className="flex items-center space-x-2">
           <h1 className="text-xl font-bold text-primary">Intune</h1>
-          {isAdmin && (
+          {/* {isAdmin && (
             <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded-full">
               관리자
             </span>
-          )}
+          )} */}
         </div>
 
         <div className="flex items-center space-x-2">
-          {currentUser ? (
+          {/* {currentUser ? (
             <div className="flex items-center space-x-2">
               {isAdmin && (
                 <button
@@ -53,7 +53,7 @@ export function Header({ user }: HeaderProps) {
             </div>
           ) : (
             <HamburgerMenu />
-          )}
+          )} */}
         </div>
       </div>
     </header>

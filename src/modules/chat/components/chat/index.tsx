@@ -46,7 +46,7 @@ const MessageItem = React.memo<{
         <div className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</div>
         
         {/* 이미지 표시 */}
-        {message.imageUrl && (
+        {/* {message.imageUrl && (
           <div className="mt-2">
             <img 
               src={message.imageUrl} 
@@ -55,7 +55,7 @@ const MessageItem = React.memo<{
               onClick={() => window.open(message.imageUrl, '_blank')}
             />
           </div>
-        )}
+        )} */}
         
         {/* 시간 */}
         <div className={`text-xs mt-1 ${
@@ -102,18 +102,18 @@ const Chat: React.FC<ChatProps> = ({ roomId }) => {
   };
 
   // 메모이제이션된 채팅방 로딩 함수
-  const loadChatRoom = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data = await chatApi.getChatRoom(roomId);
-      setRoom(data.room);
-      setMessages(data.messages);
-    } catch (err: any) {
-      setError(err.message || 'Failed to load chat room');
-    } finally {
-      setLoading(false);
-    }
-  }, [roomId]);
+  // const loadChatRoom = useCallback(async () => {
+  //   setLoading(true);
+  //   try {
+  //     const data = await chatApi.getChatRoom(roomId);
+  //     setRoom(data.room);
+  //     setMessages(data.messages);
+  //   } catch (err: any) {
+  //     setError(err.message || 'Failed to load chat room');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }, [roomId]);
 
   // 메모이제이션된 메시지 전송 함수
   const handleSendMessage = useCallback(async (e: React.FormEvent) => {
@@ -122,38 +122,38 @@ const Chat: React.FC<ChatProps> = ({ roomId }) => {
 
     try {
       // 이미지가 있는 경우 이미지 메시지 전송
-      if (selectedImage) {
-        const formData = new FormData();
-        formData.append('image', selectedImage);
-        formData.append('roomId', roomId);
-        if (newMessage.trim()) {
-          formData.append('content', newMessage);
-        }
+      // if (selectedImage) {
+      //   const formData = new FormData();
+      //   formData.append('image', selectedImage);
+      //   formData.append('roomId', roomId);
+      //   if (newMessage.trim()) {
+      //     formData.append('content', newMessage);
+      //   }
 
-        // 실제 API 호출 대신 모의 이미지 메시지 생성
-        const imageMessage: ChatMessage = {
-          id: `img_${Date.now()}`,
-          senderId: currentUserId!,
-          senderName: useAuthStore.getState().user?.name || '나',
-          content: newMessage.trim() || '이미지를 보냈습니다.',
-          imageUrl: imagePreview, // 실제로는 서버에서 받은 URL
-          timestamp: new Date(),
-        };
+      //   // 실제 API 호출 대신 모의 이미지 메시지 생성
+      //   // const imageMessage: ChatMessage = {
+      //   //   id: `img_${Date.now()}`,
+      //   //   senderId: currentUserId!,
+      //   //   senderName: useAuthStore.getState().user?.name || '나',
+      //   //   content: newMessage.trim() || '이미지를 보냈습니다.',
+      //   //   imageUrl: imagePreview, // 실제로는 서버에서 받은 URL
+      //   //   timestamp: new Date(),
+      //   // };
 
-        setMessages(prev => [...prev, imageMessage]);
-        setSelectedImage(null);
-        setImagePreview('');
-        if (fileInputRef.current) {
-          fileInputRef.current.value = '';
-        }
-      } else {
-        // 텍스트 메시지 전송
-        const message = await chatApi.sendMessage({
-          roomId,
-          content: newMessage,
-        });
-        setMessages(prev => [...prev, message]);
-      }
+      //   setMessages(prev => [...prev, imageMessage]);
+      //   setSelectedImage(null);
+      //   setImagePreview('');
+      //   if (fileInputRef.current) {
+      //     fileInputRef.current.value = '';
+      //   }
+      // } else {
+        // // 텍스트 메시지 전송
+        // const message = await chatApi.sendMessage({
+        //   roomId,
+        //   content: newMessage,
+        // });
+        // setMessages(prev => [...prev, message]);
+      // }
 
       setNewMessage('');
       scrollToBottom();
@@ -229,10 +229,10 @@ const Chat: React.FC<ChatProps> = ({ roomId }) => {
     return groups;
   }, [sortedMessages]);
 
-  useEffect(() => {
+  // useEffect(() => {
     // roomId 변경 시 채팅방 정보/메시지 재로딩
-    loadChatRoom();
-  }, [loadChatRoom]);
+    // loadChatRoom();
+  // }, [loadChatRoom]);
 
   useEffect(() => {
     // 새 메시지가 추가되면 스크롤을 맨 아래로
@@ -278,7 +278,7 @@ const Chat: React.FC<ChatProps> = ({ roomId }) => {
           <h3 className="text-lg font-semibold text-gray-900 mb-2">오류가 발생했습니다</h3>
           <p className="text-gray-600 mb-4">{error}</p>
           <button 
-            onClick={loadChatRoom}
+            // onClick={loadChatRoom}
             className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
           >
             다시 시도
@@ -316,7 +316,8 @@ const Chat: React.FC<ChatProps> = ({ roomId }) => {
                 <MessageItem
                   key={message.id}
                   message={message}
-                  isOwnMessage={message.senderId === currentUserId}
+                  // isOwnMessage={message.senderId === currentUserId}
+                  isOwnMessage={false}
                   showAvatar={showAvatar}
                 />
               );

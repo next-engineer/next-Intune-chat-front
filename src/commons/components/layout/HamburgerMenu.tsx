@@ -43,7 +43,7 @@ export function HamburgerMenu({ user }: HamburgerMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { isDarkMode, toggleDarkMode } = useThemeStore();
-  const { isAdmin, logout } = useAuthStore();
+  const { logout } = useAuthStore();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -152,8 +152,9 @@ export function HamburgerMenu({ user }: HamburgerMenuProps) {
   ];
 
   // 권한에 따라 메뉴 필터링
-  const filteredMenuItems = menuItems.filter(item => !item.adminOnly || isAdmin);
-  const filteredAdminMenuItems = adminMenuItems.filter(item => isAdmin);
+  const filteredMenuItems = menuItems.filter(item => !item.adminOnly);
+  // const filteredMenuItems = menuItems.filter(item => !item.adminOnly || isAdmin);
+  // const filteredAdminMenuItems = adminMenuItems.filter(item => isAdmin);
 
   return (
     <div className="relative">
@@ -207,12 +208,13 @@ export function HamburgerMenu({ user }: HamburgerMenuProps) {
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <p className="font-medium text-gray-900 dark:text-white">{user.name}</p>
-                  {isAdmin && (
+                  {/* {isAdmin && (
                     <Shield className="w-4 h-4 text-red-600" />
-                  )}
+                  )} */}
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {isAdmin ? '관리자' : '일반 사용자'}
+                  '일반 사용자'
+                  {/* {isAdmin ? '관리자' : '일반 사용자'} */}
                 </p>
               </div>
             </div>
@@ -223,7 +225,7 @@ export function HamburgerMenu({ user }: HamburgerMenuProps) {
         <div className="flex-1 overflow-y-auto bg-white dark:bg-gray-900">
           <div className="p-2">
             {/* 관리자 메뉴 */}
-            {isAdmin && filteredAdminMenuItems.length > 0 && (
+            {/* {isAdmin && filteredAdminMenuItems.length > 0 && (
               <div className="mb-4">
                 <h3 className="px-3 py-2 text-xs font-semibold text-red-600 uppercase tracking-wider">
                   관리자
@@ -244,7 +246,7 @@ export function HamburgerMenu({ user }: HamburgerMenuProps) {
                   </button>
                 ))}
               </div>
-            )}
+            )} */}
 
             {/* 메인 메뉴 */}
             <div className="mb-4">

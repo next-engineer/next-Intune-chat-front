@@ -12,6 +12,12 @@ import {
   isLoggedInFromCookies,
 } from "../commons/utils/cookieUtils";
 
+interface User {
+  id: number;
+  email: string;
+  name: string;
+  avatar?: string;
+}
 
 /**
  * 인증 스토어 상태/액션 타입
@@ -20,23 +26,33 @@ import {
  * - `initializeFromCookies`: 쿠키에서 인증 상태 초기화
  */
 interface AuthState {
+  user: User | null; // <-- user 속성 추가
   isAuthenticated: boolean;
-  setAuthenticated: () => void;
+  // setAuthenticated: () => void;
+  setUser: (user: User) => void; // <-- setUser 액션 추가
   logout: () => void;
   initializeFromCookies: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
+      user: null, // <-- 초기 상태에 user 추가
       isAuthenticated: false,
 
-      // 로그인 성공 시 상태 업데이트 및 쿠키 설정
-      setAuthenticated: async () => {
+      setUser: (user) => {
         set({
+          user: user,
           isAuthenticated: true,
         });
       },
+
+      // 로그인 성공 시 상태 업데이트 및 쿠키 설정
+      // setAuthenticated: async () => {
+      //   set({
+      //     isAuthenticated: true,
+      //   });
+      // },
 
       // 로그아웃 시 상태 초기화 및 쿠키 삭제
       logout: () => {
@@ -45,6 +61,7 @@ export const useAuthStore = create<AuthState>()(
 
         // Zustand 상태 초기화
         set({
+          user: null, // <-- 로그아웃 시 user를 null로 초기화
           isAuthenticated: false,
         });
       },
@@ -60,6 +77,7 @@ export const useAuthStore = create<AuthState>()(
         } else {
           // 쿠키가 유효하지 않으면 상태 초기화
           set({
+            user: null, // <-- user도 null로 초기화
             isAuthenticated: false,
           });
         }
@@ -69,6 +87,7 @@ export const useAuthStore = create<AuthState>()(
       name: "auth-storage",
       // 로컬 스토리지에 저장할 필드만 선별
       partialize: (state) => ({
+        user: state.user,
         isAuthenticated: state.isAuthenticated,
       }),
     }

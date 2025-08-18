@@ -123,10 +123,10 @@ export default function AdminUsers() {
       return;
     }
     
-    if (!user?.isAdmin) {
-      navigate('/');
-      return;
-    }
+    // if (!user?.isAdmin) {
+    //   navigate('/');
+    //   return;
+    // }
   }, [isAuthenticated, user, navigate]);
 
   // 검색 및 필터링
@@ -160,18 +160,18 @@ export default function AdminUsers() {
     setShowUserModal(true);
   };
 
-  if (!isAuthenticated || !user?.isAdmin) {
-    return (
-      <MainLayout>
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-gray-500">접근 권한을 확인하는 중...</p>
-          </div>
-        </div>
-      </MainLayout>
-    );
-  }
+  // if (!isAuthenticated || !user?.isAdmin) {
+  //   return (
+  //     <MainLayout>
+  //       <div className="flex items-center justify-center min-h-screen">
+  //         <div className="text-center">
+  //           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+  //           <p className="text-gray-500">접근 권한을 확인하는 중...</p>
+  //         </div>
+  //       </div>
+  //     </MainLayout>
+  //   );
+  // }
 
   return (
     <MainLayout>

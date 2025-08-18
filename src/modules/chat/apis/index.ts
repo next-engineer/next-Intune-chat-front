@@ -181,14 +181,14 @@ const JIMIN_DUMMY_MESSAGES: ChatMessage[] = [
  */
 const DUMMY_CHAT_ROOMS: ChatRoom[] = [
   {
-    id: "jimin",
+    matchId: "jimin",
     name: "지민",
     participants: ["current_user", "jimin"],
     lastMessage: JIMIN_DUMMY_MESSAGES[JIMIN_DUMMY_MESSAGES.length - 1],
     unreadCount: 0,
   },
   {
-    id: "seoyeon",
+    matchId: "seoyeon",
     name: "서연",
     participants: ["current_user", "seoyeon"],
     lastMessage: {
@@ -201,7 +201,7 @@ const DUMMY_CHAT_ROOMS: ChatRoom[] = [
     unreadCount: 1,
   },
   {
-    id: "minji",
+    matchId: "minji",
     name: "민지",
     participants: ["current_user", "minji"],
     lastMessage: {
@@ -262,65 +262,65 @@ export const chatApi = {
    * - 내 메시지와 상대방 메시지를 구분하기 위해 실제 사용자 ID로 senderId 매핑
    * - 다른 채팅방은 빈 메시지 목록 반환
    */
-  getChatRoom: async (roomId: string): Promise<{ room: ChatRoom; messages: ChatMessage[] }> => {
-    try {
-      // 지민 채팅방: 22개의 더미 대화 메시지 반환
-      if (roomId === "jimin") {
-        const room = DUMMY_CHAT_ROOMS.find((r) => r.id === "jimin");
-        if (room) {
-          // 실제 로그인한 사용자의 ID를 가져와서 내 메시지 구분
-          const currentUserId = useAuthStore.getState().user?.id || "user_default";
-          const modifiedMessages = JIMIN_DUMMY_MESSAGES.map((msg) => ({
-            ...msg,
-            senderId: msg.senderId === "current_user" ? currentUserId : msg.senderId,
-          }));
-          return { room, messages: modifiedMessages };
-        }
-      }
+  // getChatRoom: async (roomId: string): Promise<{ room: ChatRoom; messages: ChatMessage[] }> => {
+  //   try {
+  //     // 지민 채팅방: 22개의 더미 대화 메시지 반환
+  //     if (roomId === "jimin") {
+  //       const room = DUMMY_CHAT_ROOMS.find((r) => r.matchId === "jimin");
+  //       if (room) {
+  //         // 실제 로그인한 사용자의 ID를 가져와서 내 메시지 구분
+  //         const currentUserId = useAuthStore.getState().user?.id || "user_default";
+  //         const modifiedMessages = JIMIN_DUMMY_MESSAGES.map((msg) => ({
+  //           ...msg,
+  //           senderId: msg.senderId === "current_user" ? currentUserId : msg.senderId,
+  //         }));
+  //         return { room, messages: modifiedMessages };
+  //       }
+  //     }
 
-      // 다른 채팅방: 빈 메시지 목록 반환
-      const room = DUMMY_CHAT_ROOMS.find((r) => r.id === roomId) || DUMMY_CHAT_ROOMS[0];
-      return { room, messages: [] };
+  //     // 다른 채팅방: 빈 메시지 목록 반환
+  //     const room = DUMMY_CHAT_ROOMS.find((r) => r.id === roomId) || DUMMY_CHAT_ROOMS[0];
+  //     return { room, messages: [] };
 
-      // 실제 API 호출 (운영 환경에서 사용)
-      // const response = await axiosInstance.get(`${API_ENDPOINTS.CHAT.ROOM}/${roomId}`);
-      // const data = response.data || {};
-      // const room = mapChatRoom(data.room);
-      // const messages = Array.isArray(data.messages) ? data.messages.map(mapChatMessage) : [];
-      // return { room, messages };
-    } catch (error) {
-      throw ApiErrorHandler.handle(error);
-    }
-  },
+  //     // 실제 API 호출 (운영 환경에서 사용)
+  //     // const response = await axiosInstance.get(`${API_ENDPOINTS.CHAT.ROOM}/${roomId}`);
+  //     // const data = response.data || {};
+  //     // const room = mapChatRoom(data.room);
+  //     // const messages = Array.isArray(data.messages) ? data.messages.map(mapChatMessage) : [];
+  //     // return { room, messages };
+  //   } catch (error) {
+  //     throw ApiErrorHandler.handle(error);
+  //   }
+  // },
 
   /**
    * 메시지 전송
    * - 개발 환경에서는 실제 로그인한 사용자 정보로 새 메시지 생성
    * - 실제 운영 환경에서는 서버에 메시지 전송 후 응답 반환
    */
-  sendMessage: async (data: SendMessageRequest): Promise<ChatMessage> => {
-    try {
-      // 개발용: 실제 사용자 정보로 새 메시지 생성
-      const currentUserId = useAuthStore.getState().user?.id || "user_default";
-      const currentUserName = useAuthStore.getState().user?.name || "나";
+  // sendMessage: async (data: SendMessageRequest): Promise<ChatMessage> => {
+  //   try {
+  //     // 개발용: 실제 사용자 정보로 새 메시지 생성
+  //     const currentUserId = useAuthStore.getState().user?.id || "user_default";
+  //     const currentUserName = useAuthStore.getState().user?.name || "나";
 
-      const newMessage: ChatMessage = {
-        id: "msg_" + Date.now(),
-        content: data.content,
-        senderId: currentUserId,
-        senderName: currentUserName,
-        timestamp: new Date(),
-      };
+  //     const newMessage: ChatMessage = {
+  //       id: "msg_" + Date.now(),
+  //       content: data.content,
+  //       senderId: currentUserId,
+  //       senderName: currentUserName,
+  //       timestamp: new Date(),
+  //     };
 
-      return newMessage;
+  //     return newMessage;
 
-      // 실제 API 호출 (운영 환경에서 사용)
-      // const response = await axiosInstance.post(API_ENDPOINTS.CHAT.SEND_MESSAGE, data);
-      // return mapChatMessage(response.data);
-    } catch (error) {
-      throw ApiErrorHandler.handle(error);
-    }
-  },
+  //     // 실제 API 호출 (운영 환경에서 사용)
+  //     // const response = await axiosInstance.post(API_ENDPOINTS.CHAT.SEND_MESSAGE, data);
+  //     // return mapChatMessage(response.data);
+  //   } catch (error) {
+  //     throw ApiErrorHandler.handle(error);
+  //   }
+  // },
 };
 
 // 내부 유틸: UTF-8 문자열(ISO8601 또는 UNIX epoch 문자열/숫자)를 Date로 변환
@@ -365,7 +365,7 @@ function mapChatMessage(raw: any): ChatMessage {
  */
 function mapChatRoom(raw: any): ChatRoom {
   const base: ChatRoom = {
-    id: String(raw?.id ?? ""),
+    matchId: String(raw?.id ?? ""),
     name: String(raw?.name ?? ""),
     participants: Array.isArray(raw?.participants) ? raw.participants.map(String) : [],
     unreadCount: Number(raw?.unreadCount ?? 0),

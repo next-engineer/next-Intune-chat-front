@@ -215,7 +215,7 @@ export function ProfileEditForm() {
         email: formData.email,
         name: formData.name,
         avatar: profilePreview || user!.avatar, // 프로필 이미지 업데이트
-        isAdmin: user!.isAdmin,
+        // isAdmin: user!.isAdmin,
       };
 
       // 새로운 토큰 생성 (실제로는 서버에서 받아옴)
@@ -223,7 +223,7 @@ export function ProfileEditForm() {
       const newRefreshToken = "updated_refresh_token_" + Date.now();
 
       // Zustand 상태 업데이트
-      await setUser(updatedUser, newToken, newRefreshToken);
+      // await setUser(updatedUser, newToken, newRefreshToken);
 
       setSuccessMessage("회원정보가 성공적으로 수정되었습니다!");
       

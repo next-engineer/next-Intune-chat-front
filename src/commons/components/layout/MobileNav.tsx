@@ -12,7 +12,7 @@ interface MobileNavProps {
 export function MobileNav({ activeTab, onTabChange }: MobileNavProps) {
   const navigate = useNavigate()
   const location = useLocation()
-  const { isAdmin } = useAuthStore()
+  // const { isAdmin } = useAuthStore()
 
   // Determine active tab based on current path
   const getCurrentTab = () => {
@@ -38,8 +38,9 @@ export function MobileNav({ activeTab, onTabChange }: MobileNavProps) {
     { id: "pingpong" as const, label: "핑퐁", icon: Users, path: "/pingpong" },
   ]
 
-  const tabs = isAdmin ? [...baseTabs, ...adminTabs] : baseTabs
-
+  // const tabs = isAdmin ? [...baseTabs, ...adminTabs] : baseTabs
+  const tabs = baseTabs
+  
   const handleTabClick = (tab: (typeof tabs)[0]) => {
     onTabChange?.(tab.id)
     navigate(tab.path)
